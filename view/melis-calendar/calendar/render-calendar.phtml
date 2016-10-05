@@ -1,0 +1,37 @@
+<?php
+
+	$id = '';
+	if (!empty($this->zoneconfig['conf']['id']) && !$this->prefixId)
+		$id = ' id="' . $this->zoneconfig['conf']['id'] . '"';
+	else
+		$id = ' id="' . $this->idPage . '_' . $this->zoneconfig['conf']['id'] . '"';
+	$data_melisKey = $this->melisKey;
+	
+?>
+<div data-melisKey='<?= $data_melisKey; ?>'<?= $id; ?> class="tab-pane container-level-a">
+	<div class="me-heading bg-white border-bottom" id="id_meliscore_tool_user_header" data-meliskey="meliscore_tool_user_header">
+    	<div class="row">
+    		<div class="me-hl col-xs-12 col-sm-8 col-md-9">
+    			<h1 class="content-heading"><?php echo $this->translate('tr_melistoolcalendar_tool_calendar')?></h1>
+    		</div>
+      		<div class="me-hr col-xs-12 col-sm-4 col-md-3"></div>	
+    	</div>
+    </div>
+    
+	<div class="innerAll spacing-x2">
+		<div class="innerAll spacing-x2">
+			<div class="row">
+    			<div class="col-md-4">
+    				<?php 
+                        echo $this->melistoolcalendar_tool_create_form;
+                        echo $this->melistoolcalendar_tool_recent_added;
+                    ?>
+             	</div>   
+                <div class="col-md-8">
+                	<?php echo $this->melistoolcalendar_tool_calendar_content;?>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

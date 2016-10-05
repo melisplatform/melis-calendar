@@ -1,0 +1,64 @@
+.event-icon{
+    float: right;
+    color: #dadada;
+    position: absolute;
+    right: 0;
+    top: 0;
+    background: #932e2a;
+    border-radius: inherit;
+}
+.event-icon i{
+    padding: 3px 3px;
+    margin-top: 2px;
+    margin-right: 2px;
+    border-radius: 5px;
+}
+
+.delete-event:hover{
+	color: #fff;
+	background-color: #932e2a;
+}
+
+.bg-primary {
+    background: #932e2a !important;
+}
+
+.update-event:hover{
+	color: #fff;
+	background-color: #932e2a;
+}
+
+.dropdown-menu li.active a, .dropdown-menu li.active:hover a {
+    background-color: #932e2a; 
+}
+
+.fc-event, .fc-event:hover {
+    background: #932e2a;
+}
+
+/*
+	Recent Added Item
+*/
+.calendar-tool-recent ul.list-timeline li span.date {
+    width: 63px !important;
+    text-align: center;
+}
+
+.fc-state-highlight{background:rgba(0,0,0,0.2)}#external-events ul{list-style:none;margin:0 0 20px}#external-events li{margin:0 0 5px;padding:5px 10px;background:#932E2A;color:#fff;text-shadow:0 1px 0 rgba(0,0,0,0.5);font-size:.85em;height:26px;line-height:16px;cursor:pointer;-webkit-border-radius:3px 3px 3px 3px;-moz-border-radius:3px 3px 3px 3px;border-radius:3px 3px 3px 3px}#external-events li.glyphicons{padding:5px 5px 5px 33px;display:block}#external-events li.glyphicons i:before{font-size:14px;color:#fff;top:0;left:0;background:rgba(0,0,0,0.3);height:26px;width:26px;line-height:26px;text-align:center;-webkit-border-radius:3px 0 0 3px;-moz-border-radius:3px 0 0 3px;border-radius:3px 0 0 3px;border-right:1px solid rgba(255,255,255,0.4)}.fc-event,.fc-event:hover{padding:2px 5px;background:#932E2A;color:#fff;text-shadow:0 1px 0 rgba(0,0,0,0.5);font-size:.85em;height:24px;line-height:20px;cursor:pointer;border:none}.fc-header-title h2{font-size:16pt;line-height:25px}.fc-event-skin{border-color:#932E2A;background-color:#932E2A;text-shadow:0 1px 0 rgba(0,0,0,0.5);box-shadow:inset 1px 1px 1px rgba(255,255,255,0.2),inset -1px -1px 1px rgba(0,0,0,0.2);-moz-box-shadow:inset 1px 1px 1px rgba(255,255,255,0.2),inset -1px -1px 1px rgba(0,0,0,0.2);-webkit-box-shadow:inset 1px 1px 1px rgba(255,255,255,0.2),inset -1px -1px 1px rgba(0,0,0,0.2)}.fc-event-time,.fc-event-title{padding:0 5px}#calendar .btn-group .btn-primary{margin-right:2px}.fc-button{height:30px;line-height:27px}body{padding-top:47px}
+
+.calendar-highlight{
+    color: #fff;
+	background-color: #e64444;
+}
+
+.calendar-highlight:hover{
+	background-color: #e64444 !important;
+}
+
+#id_melistoolcalendar_tool_calendar_content .fc-event-inner {
+    width: 76%;
+    height: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}

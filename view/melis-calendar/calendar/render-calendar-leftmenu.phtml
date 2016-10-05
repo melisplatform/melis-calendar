@@ -1,0 +1,42 @@
+<?php
+
+	$name = '';
+	$id = '';
+	if (!empty($this->zoneconfig['conf']['name']))
+		$name = $this->zoneconfig['conf']['name'];
+	if (!empty($this->zoneconfig['conf']['id']))
+		$id = ' id="' . $this->zoneconfig['conf']['id'] . '"';
+	$data_melisKey = $this->melisKey;
+		
+?>
+<li<?= $id; ?> class="hasSubmenu" data-melisKey='<?= $data_melisKey; ?>'>
+    <a data-target="#calendar-menu-container" data-toggle="collapse" class="collapsed">
+        <i class="fa fa-calendar">
+        </i><span><?= $name; ?></span>
+    </a>
+    
+	<ul class="collapse" id="calendar-menu-container">
+	    <?php 
+            if(!empty($this->zoneconfig['interface'])) {
+                
+                foreach($this->zoneconfig['interface'] as $keyConfig => $menuConfig) {
+
+                    echo '<li class="melis-opentools" data-tool-icon="'.$menuConfig['conf']['icon'].'" data-tool-name="'.$menuConfig['conf']['name'].'" data-tool-id="'.$menuConfig['conf']['id'].'" data-tool-meliskey="'.$menuConfig['conf']['melisKey'].'">
+    					<a href="#">
+    						<i class="'.$menuConfig['conf']['icon'].'"></i>
+    						<span>'.$menuConfig['conf']['name'].'</span>
+    					</a>
+    				</li>';
+                }
+            }else{
+                echo '<li class="melis-opentools">
+					<a href="#">
+						<i class="fa fa fa-times"></i>
+						<span>No Sub Menu Available</span>
+					</a>
+				</li>';
+            }
+        ?>
+    </ul>
+</li>
+

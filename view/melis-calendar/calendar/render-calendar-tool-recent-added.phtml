@@ -1,0 +1,30 @@
+<?php
+	$id = '';
+	if (!empty($this->zoneconfig['conf']['id']))
+		$id = ' id="'. $this->zoneconfig['conf']['id'] . '"';
+	$data_melisKey = 'data-melisKey="'.$this->melisKey.'"';
+?>
+<div <?php echo $id.' '.$data_melisKey; ?> style="display: relative">
+	<div class="widget row widget-inverse">
+	    <!-- Widget heading -->
+		<div class="widget-head">
+			<h4 class="heading"><?php echo $this->translate('tr_melistoolcalendar_recent_added')?></h4>
+		</div>
+		<!-- // Widget heading END -->
+		<div class="widget-body">
+			<div class="widget-timeline calendar-tool-recent">
+    			<ul class="list-timeline">
+    				<?php $event = $this->recentAdded ?>
+    				<?php for ($i = 0; $i < count($event); $i++){?>
+        				<li>
+        					<span class="date"><?php echo ($this->locale=='en_EN') ? date('m/d/y',strtotime($event[$i]['cal_date_added'])) : date('d/m/y',strtotime($event[$i]['cal_date_added']))?></span>
+        					<span>&nbsp;-&nbsp;</span>
+        					<span class="ellipsis"><span class="text-danger"><?php echo $event[$i]['usr_firstname'].' '.$event[$i]['usr_lastname'] ?></span> : <?php echo $event[$i]['cal_event_title']?></span>
+        					<div class="clearfix"></div>
+        				</li>
+					<?php }?>
+    			</ul>
+    		</div>
+        </div>
+	</div>
+</div>
