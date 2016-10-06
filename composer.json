@@ -3,6 +3,19 @@
   "type": "melisplatform-module",
   "license": "OSL-3.0",
   "homepage": "https://github.com/melisplatform/melis-calendar",
+  "support": {
+    "source": "https://github.com/melisplatform/melis-calendar",
+    "issues": "https://github.com/melisplatform/melis-calendar/issues"
+  },
+  "keywords": [
+    "cms",
+    "melis",
+    "zf2",
+    "module"
+  ],
+  "extra": {
+    "module-name": "MelisCalendar"
+  },
   "require": {
     "php": "^5.5 || ^7.0"
   },
