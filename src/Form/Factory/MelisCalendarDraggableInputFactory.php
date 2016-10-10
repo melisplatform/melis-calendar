@@ -16,7 +16,6 @@ use Zend\ServiceManager\FactoryInterface;
 /**
  * Melis Calendar Draggble Input Input Element
  */
-
 class MelisCalendarDraggableInputFactory extends Text implements FactoryInterface
 {
     public function createService(ServiceLocatorInterface $formElementManager)

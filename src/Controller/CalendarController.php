@@ -11,10 +11,7 @@ namespace MelisCalendar\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
-// use Zend\Form\Annotation\Object;
 use Zend\Session\Container;
-
-// use MelisCore\Service\MelisCoreRightsService;
 
 class CalendarController extends AbstractActionController
 {

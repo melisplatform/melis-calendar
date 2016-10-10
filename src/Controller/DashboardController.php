@@ -1,11 +1,22 @@
 <?php
+
+/**
+ * Melis Technology (http://www.melistechnology.com)
+ *
+ * @copyright Copyright (c) 2016 Melis Technology (http://www.melistechnology.com)
+ *
+ */
+
 namespace MelisCalendar\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
 /**
- * This class renders Melis CMS Dashboard
+ * Dashboard controller for MelisCalendar
+ * 
+ * Used to render dashboard components in MelisPlatform Back Office
+ *
  */
 class DashboardController extends AbstractActionController
 {

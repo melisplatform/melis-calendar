@@ -3,7 +3,7 @@
 /**
  * Melis Technology (http://www.melistechnology.com)
  *
- * @copyright Copyright (c) 2015 Melis Technology (http://www.melistechnology.com)
+ * @copyright Copyright (c) 2016 Melis Technology (http://www.melistechnology.com)
  *
  */
 
@@ -13,13 +13,13 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
 
 /**
- * Calendar Tool
+ * This controller handles the calendar tool
  */
 class ToolCalendarController extends AbstractActionController
 {
     /*
      * Retrive Calendar Event to initialize calender uifor Dashboard Calendar
-     * */
+     */
     public function retrieveDashboardCalendarEventsAction(){
         $calendarTable = $this->getServiceLocator()->get('MelisCalendarTable');
         $result = $calendarTable->retrieveDashboardCalendarEvents();
@@ -27,8 +27,9 @@ class ToolCalendarController extends AbstractActionController
     }
     
     /*  
-     * Retrive Calendar Event to initialize calender ui
-     * */
+     * Retrieve Calendar Event to initialize calender ui
+     * 
+     */
     public function retrieveCalendarEventsAction(){
         $calendarTable = $this->getServiceLocator()->get('MelisCalendarTable');
         $result = $calendarTable->retrieveCalendarEvents();
@@ -36,8 +37,9 @@ class ToolCalendarController extends AbstractActionController
     }
     
     /*  
-     * Adding Calendar Adding and Updating Event
-     * */
+     * This action adds an event to the calendar
+     * 
+     */
     public function addEventAction(){
         $translator = $this->getServiceLocator()->get('translator');
         
@@ -104,7 +106,7 @@ class ToolCalendarController extends AbstractActionController
     
     /* 
      * Updating Calendar Event by resizing Calendar item event
-     *  */
+     */
     public function reschedEventAction(){
         $translator = $this->getServiceLocator()->get('translator');
         
@@ -116,8 +118,6 @@ class ToolCalendarController extends AbstractActionController
         $errors  = array();
         $textMessage = '';
         $textTitle = '';
-         
-        
          
         if($request->isPost()) {
              
@@ -159,7 +159,7 @@ class ToolCalendarController extends AbstractActionController
     
     /*  
      * Deleting Calendar item event
-     * */
+     */
     public function deleteEventAction(){
         $translator = $this->getServiceLocator()->get('translator');
         
@@ -198,8 +198,8 @@ class ToolCalendarController extends AbstractActionController
     }
     
     /* 
-     * Retriving Calendar item event data for updating
-     *  */
+     * Retrieving Calendar item event data for updating
+     */
     public function getEventTitleAction(){
         $translator = $this->getServiceLocator()->get('translator');
         

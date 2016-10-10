@@ -1,22 +1,34 @@
 <?php
 
+/**
+ * Melis Technology (http://www.melistechnology.com)
+ *
+ * @copyright Copyright (c) 2016 Melis Technology (http://www.melistechnology.com)
+ *
+ */
+
 namespace MelisCalendar\Service;
 
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-class MelisCalendarService  implements  ServiceLocatorAwareInterface{
+/**
+ * This service handles access to the calendar
+ */
+class MelisCalendarService  implements  ServiceLocatorAwareInterface
+{
 	protected $serviceLocator;
 	
-	public function setServiceLocator(ServiceLocatorInterface $sl){
+	public function setServiceLocator(ServiceLocatorInterface $sl)
+	{
 		$this->serviceLocator = $sl;
 		return $this;
 	}
 	
-	public function getServiceLocator(){
+	public function getServiceLocator()
+	{
 		return $this->serviceLocator;
 	}	
-	
 	
 	/* 
 	 * Adding and Updating Calendar Event
@@ -43,7 +55,8 @@ class MelisCalendarService  implements  ServiceLocatorAwareInterface{
 	    $userAuthDatas =  $melisCoreAuth->getStorage()->read();
 	    $userId = (int) $userAuthDatas->usr_id;
 	     
-	    if (!isset($postValues['cal_id'])){
+	    if (!isset($postValues['cal_id']))
+	    {
 	         
 	        $postValues['cal_date_end'] = $postValues['cal_date_start'];
 	        $postValues['cal_date_last_update'] = $postValues['cal_date_start'];
@@ -60,7 +73,9 @@ class MelisCalendarService  implements  ServiceLocatorAwareInterface{
 	            'end' => $postValues['cal_date_end'],
 	        );
 	         
-	    }else{
+	    }
+	    else
+	    {
 	        $resultEvent = $calendarTable->getEntryById($postValues['cal_id']);
 	         
 	        if (!empty($resultEvent)){
@@ -95,7 +110,8 @@ class MelisCalendarService  implements  ServiceLocatorAwareInterface{
 	 * return:
 	 *     response array
 	 *  */
-	public function reschedCalendarEvent($postValues){
+	public function reschedCalendarEvent($postValues)
+	{
 	    $responseData = array();
 	    
 	    $calendarTable = $this->getServiceLocator()->get('MelisCalendarTable');
@@ -134,7 +150,8 @@ class MelisCalendarService  implements  ServiceLocatorAwareInterface{
 	 * return:
 	 *     response array
 	 *  */
-	public function deleteCalendarEvent($postValues){
+	public function deleteCalendarEvent($postValues)
+	{
 	    $responseData = array();
 	    
 	    $calendarTable = $this->getServiceLocator()->get('MelisCalendarTable');
