@@ -28,13 +28,13 @@ return array(
             ),
             'ressources' => array(
                 'js' => array(
-                    'MelisCore/assets/components/modules/admin/calendar/assets/lib/js/fullcalendar.min.js?v=v1.2.3',
+                    //'MelisCore/assets/components/modules/admin/calendar/assets/lib/js/fullcalendar.min.js?v=v1.2.3',
+                    'MelisCalendar/plugins/fullcalendar.min.js',
                     'MelisCalendar/js/tools/calendar-tool.js',
-//                     'MelisCalendar/js/tools/calendar-lang-all.js'
                 ),
-                
                 'css' => array(
-                    '/MelisCore/assets/components/modules/admin/calendar/assets/lib/css/fullcalendar.css',
+                    //'/MelisCore/assets/components/modules/admin/calendar/assets/lib/css/fullcalendar.css',
+                    'MelisCalendar/plugins/fullcalendar.css',
                     'MelisCalendar/css/calendar.css'
                 ),
             ),
@@ -84,6 +84,7 @@ return array(
                             'conf' => array(
                                 'id' => 'id_melistoolcalendar_tool_calendar_content',
                                 'melisKey' => 'melistoolcalendar_tool_calendar_content',
+                                'name' => 'tr_melistoolcalendar_tool_calendar',
                             ),
                             'forward' => array(
                                 'module' => 'MelisCalendar',
@@ -97,6 +98,7 @@ return array(
                             'conf' => array(
                                 'id' => 'id_melistoolcalendar_tool_create_form',
                                 'melisKey' => 'melistoolcalendar_tool_create_form',
+                                'name' => 'tr_melistoolcalendar_form_create',
                             ),
                             'forward' => array(
                                 'module' => 'MelisCalendar',
@@ -110,6 +112,7 @@ return array(
                             'conf' => array(
                                 'id' => 'id_melistoolcalendar_tool_recent_added',
                                 'melisKey' => 'melistoolcalendar_tool_recent_added',
+                                'name' => 'tr_melistoolcalendar_recent_added'
                             ),
                             'forward' => array(
                                 'module' => 'MelisCalendar',

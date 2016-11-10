@@ -49,7 +49,35 @@ window.initCalendarTool = function() {
 			left: 'prev,next today',
 			center: 'title',
 		},
-		
+		buttonText :{
+		    today:    translations.tr_melistoolcalendar_fullcalendar_today,
+		    month:    'month',
+		    week:     'week',
+		    day:      'day'
+		},
+		monthNames : [
+            translations.tr_melistoolcalendar_fullcalendar_jan,
+            translations.tr_melistoolcalendar_fullcalendar_feb,
+            translations.tr_melistoolcalendar_fullcalendar_mar,
+            translations.tr_melistoolcalendar_fullcalendar_apr,
+            translations.tr_melistoolcalendar_fullcalendar_may,
+            translations.tr_melistoolcalendar_fullcalendar_jun,
+            translations.tr_melistoolcalendar_fullcalendar_jul,
+            translations.tr_melistoolcalendar_fullcalendar_aug,
+            translations.tr_melistoolcalendar_fullcalendar_sep,
+            translations.tr_melistoolcalendar_fullcalendar_oct,
+            translations.tr_melistoolcalendar_fullcalendar_nov,
+            translations.tr_melistoolcalendar_fullcalendar_dec,
+        ],
+	    dayNamesShort : [
+            translations.tr_melistoolcalendar_fullcalendar_sun,
+            translations.tr_melistoolcalendar_fullcalendar_mon,
+            translations.tr_melistoolcalendar_fullcalendar_tue,
+            translations.tr_melistoolcalendar_fullcalendar_wed,
+            translations.tr_melistoolcalendar_fullcalendar_thu,
+            translations.tr_melistoolcalendar_fullcalendar_fri,
+            translations.tr_melistoolcalendar_fullcalendar_sat,
+        ],
 		editable: true,
 		droppable: true,
 		titleFormat : {

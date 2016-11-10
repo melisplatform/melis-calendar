@@ -18,5 +18,28 @@
 	    
 	    // Recent
 	    'tr_melistoolcalendar_recent_added' => 'Récents évènements ajoutés',
+	    
+	    // Months and days
+	    'tr_melistoolcalendar_fullcalendar_jan' => 'janvier',
+	    'tr_melistoolcalendar_fullcalendar_feb' => 'février',
+	    'tr_melistoolcalendar_fullcalendar_mar' => 'mars',
+	    'tr_melistoolcalendar_fullcalendar_apr' => 'avril',
+	    'tr_melistoolcalendar_fullcalendar_may' => 'mai',
+	    'tr_melistoolcalendar_fullcalendar_jun' => 'juin',
+	    'tr_melistoolcalendar_fullcalendar_jul' => 'juillet',
+	    'tr_melistoolcalendar_fullcalendar_aug' => 'août',
+	    'tr_melistoolcalendar_fullcalendar_sep' => 'septembre',
+	    'tr_melistoolcalendar_fullcalendar_oct' => 'octobre',
+	    'tr_melistoolcalendar_fullcalendar_nov' => 'novembre',
+	    'tr_melistoolcalendar_fullcalendar_dec' => 'décembre',
+	    'tr_melistoolcalendar_fullcalendar_sun' => 'dimanche',
+	    'tr_melistoolcalendar_fullcalendar_mon' => 'lundi',
+	    'tr_melistoolcalendar_fullcalendar_tue' => 'mardi',
+	    'tr_melistoolcalendar_fullcalendar_wed' => 'mercredi',
+	    'tr_melistoolcalendar_fullcalendar_thu' => 'jeudi',
+	    'tr_melistoolcalendar_fullcalendar_fri' => 'vendredi',
+	    'tr_melistoolcalendar_fullcalendar_sat' => 'samedi',
+	    
+	    'tr_melistoolcalendar_fullcalendar_today' => 'aujourd\'hui',
 	);
 ?>
