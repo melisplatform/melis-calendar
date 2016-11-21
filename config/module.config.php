@@ -48,8 +48,12 @@ return array(
     'service_manager' => array(
         'aliases' => array(
             'translator' => 'MvcTranslator',
-            'MelisCalendarTable' => 'MelisCalendar\Model\Tables\MeliscalendarTable',
-            'MelisCalendarService' => 'MelisCalendar\Service\MelisCalendarService',
+            'MelisCalendarTable' => 'MelisCalendar\Model\Tables\MelisCalendarTable',
+        ),
+        'factories' => array(
+            'MelisCalendarService' => 'MelisCalendar\Service\Factory\MelisCalendarServiceFactory',
+            
+            'MelisCalendar\Model\Tables\MelisCalendarTable' => 'MelisCalendar\Model\Tables\Factory\MelisCalendarTableFactory',
         ),
     ),
     'controllers' => array(

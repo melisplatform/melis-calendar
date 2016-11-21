@@ -169,39 +169,6 @@ window.initCalendarTool = function() {
 	});
 }
 
-// get calendar event after modal appear
-// callback for modal content
-window.getEventData = function(){
-	
-	// set local variable to still requesting
-	flag_requesting = true;
-	
-	// set element disabled until request is done
-	$('body #'+calVal_id+' #newCalendarEventInt').attr('disabled',true);
-	$('body #'+calVal_id+' .btnSaveEventTitle').attr('disabled',true);
-	
-	$.ajax({
-	    type        : 'POST', 
-	    url         :  '/melis/MelisCalendar/ToolCalendar/getEventTitle',
-	    data		: {cal_id: calVal_eventId},
-	    dataType    : 'json',
-	    encode		: true,
-	}).done(function(data) {
-		// request is done
-		
-		// set input and save button data from response data
-		var eventData = data.eventData;
-		$('body #'+calVal_id+' #newCalendarEventInt').val(eventData.cal_event_title);
-		$('body #'+calVal_id+' .btnSaveEventTitle').data('eventId',calVal_eventId);
-		// set elements undisabled
-		$('body #'+calVal_id+' #newCalendarEventInt').attr('disabled',false);
-		$('body #'+calVal_id+' .btnSaveEventTitle').attr('disabled',false);
-		
-	}).fail(function(){
-		alert( translations.tr_meliscore_error_message );
-	});
-}
-
 // Local varial Year and Month
 var fcal_year_client_event = null;
 var fcal_month_client_event = null;
@@ -246,12 +213,7 @@ var calendarTool = {
 	        encode		: true
 	  	}).done(function(data) {
 			if(data.success) {
-				// [optional] For removing duplication of event
-				// Source : http://stackoverflow.com/questions/20341201/when-using-jquery-fullcalendar-why-am-i-seeing-duplicate-events-after-switching
-				$('.fc-event').remove();
-				
-				// updating calendar after rezise event
-				$('#calendar').fullCalendar('updateEvent',event.id);
+				// Do nothing, Changes already affected to the Calendar layout
 			}else{
 				melisCoreTool.alertDanger("#siteaddalert", '', data.textMessage + "<br/>");
 				melisHelper.melisKoNotification(data.textTitle, data.textMessage, data.errors, 'closeByButtonOnly');
@@ -291,13 +253,13 @@ var calendarTool = {
 	// editing calendar event
 	// this function is to show modal for Event title edition
 	editEventTitle: function(eventId){
-		// initialation of local variable
+		// initialize of local variable calendar id
 		calVal_eventId = eventId;
 		calVal_id = 'id_meliscalendar_tool_edit_event_modal';
 		calVal_melisKey = 'meliscalendar_tool_edit_event_modal';
 		modalUrl = '/melis/MelisCalendar/Calendar/renderCalendarModal';
 		// requesitng to create modal and display after
-    	melisHelper.createModal(calVal_id, calVal_melisKey, false, null, modalUrl);
+    	melisHelper.createModal(calVal_id, calVal_melisKey, false, {cal_id: eventId}, modalUrl);
 	},
 	// saving calendar event
 	saveEventTitle : function(){
@@ -307,10 +269,11 @@ var calendarTool = {
 			name: "cal_id",
 			value: calVal_eventId
 		});
-	  	
+	  	// Retrieving the Event title directly from the input field
+	  	var eventTitle = $('body #'+calVal_id+' #newCalendarEventInt').val();
 	  	dataString.push({
 			name: "cal_event_title",
-			value: $('body #'+calVal_id+' #newCalendarEventInt').val()
+			value: eventTitle
 		});
 		dataString = $.param(dataString);
 		
@@ -322,24 +285,16 @@ var calendarTool = {
 	        encode		: true
 	  	}).done(function(data) {
 			if(data.success) {
-				// [optional] For removing duplication of event
-				// Source : http://stackoverflow.com/questions/20341201/when-using-jquery-fullcalendar-why-am-i-seeing-duplicate-events-after-switching
-				//$('.fc-event').remove();
-				// updating calendar after deleting event
-				//$('#calendar').fullCalendar( 'refetchEvents' );
-				
-				// Reload Fullcalendar
-				melisHelper.zoneReload("id_melistoolcalendar_tool_calendar_content", "melistoolcalendar_tool_calendar_content");
-				
-				// Get Data From Client Event
+				// Retrieving Calendar event id
 				var eventData = $("#calendar").fullCalendar('clientEvents', calVal_eventId)[0];
-				// Init local variable year and month
-				fcal_year_client_event = eventData.start.getFullYear();
-				fcal_month_client_event = eventData.start.getMonth();
+				// Generating event title
+				var newTitleEvent = calVal_eventId +" : "+eventTitle;
+				// Updating calendar event using FullCalendar method
+				eventData.title = newTitleEvent;
+				$('#calendar').fullCalendar('updateEvent', eventData);
 				
 				//close generated modal after saving event title
 				$('#'+calVal_id+'_container').modal('hide');
-				
 			}else{
 				melisCoreTool.alertDanger("#siteaddalert", '', data.textMessage + "<br/>");
 				melisHelper.melisKoNotification(data.textTitle, data.textMessage, data.errors, 'closeByButtonOnly');
@@ -405,7 +360,7 @@ var calendarTool = {
 						fcal_month_client_event = (parseInt(e.format('m'))-1);
 						
 						if(fc_ready){
-							calendarTool.gotoFCdate();
+							melisHelper.zoneReload("id_melistoolcalendar_tool_calendar_content", "melistoolcalendar_tool_calendar_content");
 						}
 						
 					}

@@ -79,25 +79,5 @@ class Module
         $translator->addTranslationFile('phparray', __DIR__ . '/../language/' . $locale . '.interface.php');
         $translator->addTranslationFile('phparray', __DIR__ . '/../language/' . $locale . '.forms.php');
     }
-    
-    public function getServiceConfig()
-    {
-        return array(
-			'factories' => array(
-				'MelisCalendar\Model\Tables\MelisCalendarTable' =>  function($sm) {
-					return new MelisCalendarTable($sm->get('MelisCalendarGateway'));
-				},
-			    'MelisCalendarGateway' => function($sm) {
-			         $hydratingResultSet = new HydratingResultSet(new ObjectProperty(), new MelisCalendar());
-			         return new TableGateway('melis_calendar', $sm->get('Zend\Db\Adapter\Adapter'), null, $hydratingResultSet);
-			    },
-			    'MelisCalendar\Service\MelisCalendarService' =>  function($sm) {
-					$melisCalendarService = new \MelisCalendar\Service\MelisCalendarService();
-					$melisCalendarService->setServiceLocator($sm);
-					return $melisCalendarService;
-				},
-			),
-        );
-    }
  
 }

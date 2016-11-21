@@ -30,11 +30,14 @@ return array(
                 'js' => array(
                     //'MelisCore/assets/components/modules/admin/calendar/assets/lib/js/fullcalendar.min.js?v=v1.2.3',
                     'MelisCalendar/plugins/fullcalendar.min.js',
+//                     'MelisCalendar/plugins/moment/moment.min.js',
+//                     'MelisCalendar/plugins/full-calendar/fullcalendar.min.js',
                     'MelisCalendar/js/tools/calendar-tool.js',
                 ),
                 'css' => array(
                     //'/MelisCore/assets/components/modules/admin/calendar/assets/lib/css/fullcalendar.css',
                     'MelisCalendar/plugins/fullcalendar.css',
+//                     'MelisCalendar/plugins/full-calendar/fullcalendar.css',
                     'MelisCalendar/css/calendar.css'
                 ),
             ),
@@ -136,7 +139,7 @@ return array(
                         'module' => 'MelisCalendar',
                         'controller' => 'Calendar',
                         'action' => 'render-calendar-edit-event-modal',
-                        'jscallback' => 'getEventData();',
+                        //'jscallback' => 'getEventData();',
                         'jsdatas' => array()
                     ),
                 ),

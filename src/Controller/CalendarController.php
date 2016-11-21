@@ -93,6 +93,24 @@ class CalendarController extends AbstractActionController
         // Set Calendar Event Title input non-draggable input
         $propertyForm->get('cal_event_title')->setAttribute('data-draggable', false);
         
+        
+        $calId = $this->params()->fromQuery('cal_id');
+        
+        if($calId) {
+            
+            $calendarTable = $this->getServiceLocator()->get('MelisCalendarTable');
+             
+            $resultEvent = $calendarTable->getEntryById($calId);
+             
+            if (!empty($resultEvent)){
+                $eventData = $resultEvent->current();
+                 
+                if (!empty($eventData)){
+                    $propertyForm->bind($eventData);
+                }
+            }
+        }
+        
         $view = new ViewModel();
         $view->setVariable('meliscalendar_event_title', $propertyForm);
         $view->melisKey = $melisKey;
