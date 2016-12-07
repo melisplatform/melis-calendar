@@ -14,13 +14,12 @@
 			<div class="widget widget-tabs widget-tabs-double widget-tabs-responsive margin-none border-none">
                 <div class="widget-head">
                 	<ul class="nav nav-tabs">
-                		<li class="active"><a href="#<?php echo $this->zoneconfig['conf']['id'] ?>" class="glyphicons calendar" data-toggle="tab" aria-expanded="true"><i></i> <?php echo $this->translate('tr_melistoolcalendar_tool_calendar') ?></a></li>
+                		<li class="active"><a href="#<?php echo $this->zoneconfig['conf']['id'] ?>" class="glyphicons <?php echo ($this->calId) ? 'pencil' : 'plus' ?>" data-toggle="tab" aria-expanded="true"><i></i> <?php echo $this->translate('tr_melistoolcalendar_tool_calendar') ?></a></li>
             		</ul>
         		</div>
         		<div class="widget-body innerAll inner-2x">
         			<div class="tab-content">
         				<div class="tab-pane active" <?php echo $id ?>>
-        					
                             <div class="row">
                             	<div class="col-md-12">
                                     <?php

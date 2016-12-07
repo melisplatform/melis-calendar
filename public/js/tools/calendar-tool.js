@@ -14,8 +14,37 @@ $(function(){
 	$("body").on("click", ".btnSaveEventTitle", function(e){
 		// saving event title from modal
 		calendarTool.saveEventTitle($(this).data('id'));
-	});
+	});	
+	
 });
+
+// Responsive During Resize
+$(window).on('resize',function(){
+	responsiveCalendar();
+});
+
+// Responsive Function
+function responsiveCalendar(){
+	if( $(window).width() <= 991){
+		$('#id_meliscalendar_tool .row .col-md-4').insertAfter($(this).parent().find('#id_meliscalendar_tool .row .col-md-8'));
+		console.log('test1');
+	} else {
+		$('#id_meliscalendar_tool .row .col-md-4').insertBefore($(this).parent().find('#id_meliscalendar_tool .row .col-md-8'));
+		console.log('test2');
+	}
+	/* var calTools1 = $('#id_melistoolcalendar_tool_create_form').clone().wrap('<p>').parent().html();
+	var calTools2 = $('#id_melistoolcalendar_tool_recent_added').clone().wrap('<p>').parent().html();
+	var calTools3 = $('#id_melistoolcalendar_tool_calendar_content').clone().wrap('<p>').parent().html();
+	$('#id_meliscalendar_tool .row .col-md-4').html('');
+	$('#id_meliscalendar_tool .row .col-md-8').html('');
+	if( $(window).width() <= 991){
+		$('#id_meliscalendar_tool .row .col-md-4').html(calTools3);
+		$('#id_meliscalendar_tool .row .col-md-8').html(calTools1 + calTools2);
+	} else {
+		$('#id_meliscalendar_tool .row .col-md-4').html(calTools1 + calTools2);
+		$('#id_meliscalendar_tool .row .col-md-8').html(calTools3);
+	} */
+}
 
 // Dashboard Calendar Init
 window.initDashboardCalendar = function(){
@@ -28,6 +57,7 @@ var fc_ready = false;
 // Calendar Tool Init
 window.initCalendarTool = function() {
 	
+	responsiveCalendar();
 	// local variable
 	var calVal_eventId = null;
 	var calVal_id = null;
@@ -105,7 +135,7 @@ window.initCalendarTool = function() {
 			// posting to server as new calendar event
 			$.ajax({
 		        type        : 'POST', 
-		        url         : '/melis/MelisCalendar/ToolCalendar/addEvent',
+		        url         : '/melis/MelisCalendar/ToolCalendar/saveEvent',
 		        data		: dataString,
 		        dataType    : 'json',
 		        encode		: true
@@ -137,6 +167,10 @@ window.initCalendarTool = function() {
 						
 						// Reload Recent Added Widget
 						melisHelper.zoneReload('id_melistoolcalendar_tool_recent_added','melistoolcalendar_tool_recent_added');
+						
+						// Notifications
+						melisHelper.melisOkNotification(data.textTitle, data.textMessage, '#72af46');
+						melisCore.flashMessenger();
 					}
 				} else {
 					melisCoreTool.alertDanger("#siteaddalert", '', data.textMessage + "<br/>");
@@ -213,7 +247,9 @@ var calendarTool = {
 	        encode		: true
 	  	}).done(function(data) {
 			if(data.success) {
-				// Do nothing, Changes already affected to the Calendar layout
+				// Notifications
+				melisHelper.melisOkNotification(data.textTitle, data.textMessage, '#72af46');
+				melisCore.flashMessenger();
 			}else{
 				melisCoreTool.alertDanger("#siteaddalert", '', data.textMessage + "<br/>");
 				melisHelper.melisKoNotification(data.textTitle, data.textMessage, data.errors, 'closeByButtonOnly');
@@ -241,6 +277,9 @@ var calendarTool = {
 		    	if(data.success) {
 		    		// updating calendar after deleting event
 		    		$('#calendar').fullCalendar('removeEvents',eventId);
+		    		// Notifications
+					melisHelper.melisOkNotification(data.textTitle, data.textMessage, '#72af46');
+					melisCore.flashMessenger();
 		    	}else{
 		    		melisCoreTool.alertDanger("#siteaddalert", '', data.textMessage + "<br/>");
 					melisHelper.melisKoNotification(data.textTitle, data.textMessage, data.errors, 'closeByButtonOnly');
@@ -279,7 +318,7 @@ var calendarTool = {
 		
 	  	$.ajax({
 	  		type        : 'POST', 
-	        url         : '/melis/MelisCalendar/ToolCalendar/addEvent',
+	        url         : '/melis/MelisCalendar/ToolCalendar/saveEvent',
 	        data		: dataString,
 	        dataType    : 'json',
 	        encode		: true
@@ -295,6 +334,10 @@ var calendarTool = {
 				
 				//close generated modal after saving event title
 				$('#'+calVal_id+'_container').modal('hide');
+				
+				// Notifications
+				melisHelper.melisOkNotification(data.textTitle, data.textMessage, '#72af46');
+				melisCore.flashMessenger();
 			}else{
 				melisCoreTool.alertDanger("#siteaddalert", '', data.textMessage + "<br/>");
 				melisHelper.melisKoNotification(data.textTitle, data.textMessage, data.errors, 'closeByButtonOnly');

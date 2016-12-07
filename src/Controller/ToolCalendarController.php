@@ -17,8 +17,10 @@ use Zend\View\Model\JsonModel;
  */
 class ToolCalendarController extends AbstractActionController
 {
-    /*
+    /**
      * Retrive Calendar Event to initialize calender uifor Dashboard Calendar
+     * 
+     * @return \Zend\View\Model\JsonModel
      */
     public function retrieveDashboardCalendarEventsAction(){
         $calendarTable = $this->getServiceLocator()->get('MelisCalendarTable');
@@ -26,9 +28,10 @@ class ToolCalendarController extends AbstractActionController
         return new JsonModel($result->toArray());
     }
     
-    /*  
+    /**
      * Retrieve Calendar Event to initialize calender ui
      * 
+     * @return \Zend\View\Model\JsonModel
      */
     public function retrieveCalendarEventsAction(){
         $calendarTable = $this->getServiceLocator()->get('MelisCalendarTable');
@@ -36,18 +39,18 @@ class ToolCalendarController extends AbstractActionController
         return new JsonModel($result->toArray());
     }
     
-    /*  
-     * This action adds an event to the calendar
+    /**
+     * This action will save an event to the calendar
      * 
+     * @return \Zend\View\Model\JsonModel
      */
-    public function addEventAction(){
+    public function saveEventAction(){
         $translator = $this->getServiceLocator()->get('translator');
         
         $request = $this->getRequest();
         // Default Values
         $status  = 0;
-        // This can be override with success if result is success
-        $textMessage = $translator->translate('tr_melistoolcalendar_form_event_error_msg');
+        $textMessage = '';
         $errors  = array();
         $textTitle = '';
          
@@ -73,11 +76,12 @@ class ToolCalendarController extends AbstractActionController
                 $responseData = $calendarService->addCalendarEvent($postValues);
                 
                 if (!empty($responseData)){
-                    $textMessage = $translator->translate('tr_meliscalendar_add_event_success');
+                    $textMessage = $translator->translate('tr_melistoolcalendar_save_event_success');
                     $status = 1;
                 }
             }else{
                 $errors = $propertyForm->getMessages();
+                $textMessage = $translator->translate('tr_melistoolcalendar_form_event_error_msg');
             }
              
             $appConfigForm = $appConfigForm['elements'];
@@ -95,12 +99,16 @@ class ToolCalendarController extends AbstractActionController
          
         $response = array(
             'success' => $status,
-            'textTitle' => $translator->translate('tr_melistoolcalendar_form_title'),
+            'textTitle' => $translator->translate('tr_melistoolcalendar_save_event_title'),
             'textMessage' => $textMessage,
             'errors' => $errors,
             'event' => $responseData
         );
          
+        if ($status){
+            $this->getEventManager()->trigger('meliscalendar_save_event_end', $this, $response);
+        }
+        
         return new JsonModel($response);
     }
     
@@ -113,8 +121,7 @@ class ToolCalendarController extends AbstractActionController
         $request = $this->getRequest();
         // Default Values
         $status  = 0;
-        // This can be override with success if result is success
-        $textMessage = $translator->translate('tr_melistoolcalendar_form_event_udpate_error_msg');
+        $textMessage = '';
         $errors  = array();
         $textMessage = '';
         $textTitle = '';
@@ -139,7 +146,7 @@ class ToolCalendarController extends AbstractActionController
                         $responseData = $calendarService->reschedCalendarEvent($postValues);
                         
                         if (!empty($responseData)){
-                            $textMessage = $translator->translate('tr_meliscalendar_add_event_success');
+                            $textMessage = $translator->translate('tr_melistoolcalendar_save_event_success');
                             $status = 1;
                         }
                     }
@@ -149,10 +156,14 @@ class ToolCalendarController extends AbstractActionController
          
         $response = array(
             'success' => $status,
-            'textTitle' => $translator->translate('tr_melistoolcalendar_form_title'),
+            'textTitle' => $translator->translate('tr_melistoolcalendar_save_event_title'),
             'textMessage' => $textMessage,
             'errors' => $errors,
         );
+        
+        if ($status){
+            $this->getEventManager()->trigger('meliscalendar_save_event_end', $this, $response);
+        }
          
         return new JsonModel($response);
     }
@@ -166,8 +177,7 @@ class ToolCalendarController extends AbstractActionController
         $request = $this->getRequest();
         // Default Values
         $status  = 0;
-        // This can be override with success if result is success
-        $textMessage = $translator->translate('tr_melistoolcalendar_unable_to_delete_event');
+        $textMessage = '';
         $errors  = array();
         $textMessage = '';
         $textTitle = '';
@@ -183,16 +193,22 @@ class ToolCalendarController extends AbstractActionController
                 if (!empty($responseData)){
                     $textMessage = $translator->translate('tr_melistoolcalendar_delete_event_success');
                     $status  = 1;
+                }else{
+                    $textMessage = $translator->translate('tr_melistoolcalendar_delete_event_unable');
                 }
             }
         }
          
         $response = array(
             'success' => $status,
-            'textTitle' => $translator->translate('tr_melistoolcalendar_form_title'),
+            'textTitle' => $translator->translate('tr_melistoolcalendar_delete_event_title'),
             'textMessage' => $textMessage,
             'errors' => $errors,
         );
+        
+        if ($status){
+            $this->getEventManager()->trigger('meliscalendar_save_event_end', $this, $response);
+        }
          
         return new JsonModel($response);
     }

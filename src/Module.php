@@ -12,14 +12,10 @@ namespace MelisCalendar;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 use Zend\ModuleManager\ModuleManager;
-use Zend\Db\TableGateway\TableGateway;
-use Zend\Stdlib\Hydrator\ObjectProperty;
-use Zend\Db\ResultSet\HydratingResultSet;
 use Zend\Stdlib\ArrayUtils;
 use Zend\Session\Container;
-use MelisCalendar\Model\MelisCalendar;
-use MelisCalendar\Model\Tables\MelisCalendarTable;
-// use MelisCmsProspects\Listener\MelisCmsProspectFlashMessengerListener;
+
+use MelisCalendar\Listener\MelisCalendarFlashMessengerListener;
 
 class Module
 {
@@ -28,6 +24,22 @@ class Module
         $eventManager        = $e->getApplication()->getEventManager();
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
+        
+        $sm = $e->getApplication()->getServiceManager();
+        $routeMatch = $sm->get('router')->match($sm->get('request'));
+        if (!empty($routeMatch))
+        {
+            $routeName = $routeMatch->getMatchedRouteName();
+            $module = explode('/', $routeName);
+             
+            if (!empty($module[0]))
+            {
+                if ($module[0] == 'melis-backoffice')
+                {
+                    $eventManager->attach(new MelisCalendarFlashMessengerListener());
+                }
+            }
+        }
         
         $this->createTranslations($e);
     }

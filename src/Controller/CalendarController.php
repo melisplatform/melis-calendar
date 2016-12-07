@@ -114,6 +114,7 @@ class CalendarController extends AbstractActionController
         $view = new ViewModel();
         $view->setVariable('meliscalendar_event_title', $propertyForm);
         $view->melisKey = $melisKey;
+        $view->calId = $calId;
         return $view;
     }
     

@@ -1,22 +1,23 @@
 <?php 
 	return array(
 	    'tr_melistoolcalendar_tool_calendar' => 'Calendrier',
-	    // Adding Event Form
+	    // Save Event Messages
 	    'tr_melistoolcalendar_form_event_title' => 'Titre',
 	    'tr_melistoolcalendar_form_create' => 'Créer un nouvel évènement',
 	    'tr_melistoolcalendar_form_create_drag' => '*Faites glisser après avoir entré un titre',
 	    'tr_melistoolcalendar_form_error_msg' => 'Veuillez saisir un titre avant de faire glisser l\'évènement dans le calendrier',
+	    'tr_melistoolcalendar_save_event_title' => 'Sauvegarder l\'évènement',
+	    'tr_melistoolcalendar_save_event_success' => 'L\'évènement a été sauvegardé avec succès',
 	    
-	    // Deletion Confirmation Dialog
+	    // Event Deletion Messages
 	    'tr_melistoolcalendar_delete_event_title' => 'Supprimer un évènement',
 	    'tr_melistoolcalendar_delete_event_confirm' => 'Êtes-vous sur de voulois supprimer cet évènement',
+	    'tr_melistoolcalendar_delete_event_success' => 'L\'évènement a été supprimé avec succès',
 	    'tr_melistoolcalendar_delete_event_btn_yes' => 'Oui',
 	    'tr_melistoolcalendar_delete_event_btn_no' => 'Non',
+	    'tr_melistoolcalendar_delete_event_unable' => 'Impossible de supprimer l\'évènement',
 	    
-	    // Update
-	    'tr_melistoolcalendar_update_event_title' => 'Mettre à jour l\'évènement',
-	    
-	    // Recent
+	    // Recent Event Added
 	    'tr_melistoolcalendar_recent_added' => 'Récents évènements ajoutés',
 	    
 	    // Months and days

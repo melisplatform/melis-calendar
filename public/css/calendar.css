@@ -62,3 +62,9 @@
     white-space: nowrap;
     text-overflow: ellipsis;
 }
+
+@media ( max-width: 991px ) {
+	.fc-header td {
+		white-space: normal; 
+	}
+}
