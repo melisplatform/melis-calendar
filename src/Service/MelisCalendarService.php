@@ -30,21 +30,21 @@ class MelisCalendarService  implements  ServiceLocatorAwareInterface
 		return $this->serviceLocator;
 	}	
 	
-	/* 
+	/**
 	 * Adding and Updating Calendar Event
 	 * 
-	 * Adding Required Params:
+	 * @param array $postValues
+	 * 
+	 * if the action is adding new Event, the postValues containing
 	 *     cal_event_title
 	 *     cal_date_start
-	 * Updating Required Params:
+	 * if the action is updating the Event title, the postValues containing  
 	 *     cal_id
 	 *     cal_event_title
 	 *     cal_date_start
-	 * Ex. $postValues['cal_event_title']
 	 * 
-	 * return:
-	 *     response array
-	 * */
+	 * @return Array
+	 */
 	public function addCalendarEvent($postValues){
 	    
 	    $responseData = array();
@@ -100,16 +100,12 @@ class MelisCalendarService  implements  ServiceLocatorAwareInterface
 	    return $responseData;
 	}
 	
-	/* 
-	 * Resizing Calendar Item Event or Updating the dates of the Item event
-	 * 
-	 * Required: 
-	 *     cal_id
-	 * Ex.  $postValues['cal_id']
-	 * 
-	 * return:
-	 *     response array
-	 *  */
+	/**
+	 * Resizing the date range of Calendar Item Event or Updating the dates of the Item event
+	 * @param array $postValues, this containing the calendar id, date start, date end
+	 *  
+	 * @return Array
+	 */
 	public function reschedCalendarEvent($postValues)
 	{
 	    $responseData = array();
@@ -140,20 +136,16 @@ class MelisCalendarService  implements  ServiceLocatorAwareInterface
 	    return $responseData;
 	}
 	
-	/*
+	/**
 	 * Deleting Calendar Item Event
-	 *
-	 * Required:
-	 *     cal_id
-	 * Ex.  $postValues['cal_id']
-	 *
-	 * return:
-	 *     response array
-	 *  */
+	 * 
+	 * @param Array $postValues, this containing the calendar id $postValues['cal_id']
+	 * 
+	 * @return Int|null if the deletion is failed
+	 */
 	public function deleteCalendarEvent($postValues)
 	{
-	    $responseData = array();
-	    
+	    $calId = null;
 	    $calendarTable = $this->getServiceLocator()->get('MelisCalendarTable');
 	    $resultEvent = $calendarTable->getEntryById($postValues['cal_id']);
 	     
@@ -162,11 +154,10 @@ class MelisCalendarService  implements  ServiceLocatorAwareInterface
 	        $event = $resultEvent->current();
 	         
 	        if (!empty($event)){
-	            $calendarTable->deleteById($postValues['cal_id']);
-	            $responseData['success'] = 1;
+	            $calId = $calendarTable->deleteById($postValues['cal_id']);
 	        }
 	    }
 	    
-	    return $responseData;
+	    return $calId;
 	}
 }

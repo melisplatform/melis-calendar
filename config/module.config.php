@@ -61,7 +61,6 @@ return array(
             'MelisCalendar\Controller\Dashboard' => 'MelisCalendar\Controller\DashboardController',
             'MelisCalendar\Controller\Calendar' => 'MelisCalendar\Controller\CalendarController',
             'MelisCalendar\Controller\ToolCalendar' => 'MelisCalendar\Controller\ToolCalendarController',
-            'MelisCalendar\Controller\Diagnostic' => 'MelisCalendar\Controller\DiagnosticController',
         ),
     ),
     'form_elements' => array(

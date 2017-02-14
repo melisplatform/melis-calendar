@@ -1,5 +1,4 @@
 $(function(){
-	
 	initDashboardCalendar();
 	// bidning tool action
 	$("body").on("click", ".delete-event", function(e){ 
@@ -15,7 +14,6 @@ $(function(){
 		// saving event title from modal
 		calendarTool.saveEventTitle($(this).data('id'));
 	});	
-	
 });
 
 // Responsive During Resize
@@ -27,23 +25,9 @@ $(window).on('resize',function(){
 function responsiveCalendar(){
 	if( $(window).width() <= 991){
 		$('#id_meliscalendar_tool .row .col-md-4').insertAfter($(this).parent().find('#id_meliscalendar_tool .row .col-md-8'));
-		console.log('test1');
 	} else {
 		$('#id_meliscalendar_tool .row .col-md-4').insertBefore($(this).parent().find('#id_meliscalendar_tool .row .col-md-8'));
-		console.log('test2');
 	}
-	/* var calTools1 = $('#id_melistoolcalendar_tool_create_form').clone().wrap('<p>').parent().html();
-	var calTools2 = $('#id_melistoolcalendar_tool_recent_added').clone().wrap('<p>').parent().html();
-	var calTools3 = $('#id_melistoolcalendar_tool_calendar_content').clone().wrap('<p>').parent().html();
-	$('#id_meliscalendar_tool .row .col-md-4').html('');
-	$('#id_meliscalendar_tool .row .col-md-8').html('');
-	if( $(window).width() <= 991){
-		$('#id_meliscalendar_tool .row .col-md-4').html(calTools3);
-		$('#id_meliscalendar_tool .row .col-md-8').html(calTools1 + calTools2);
-	} else {
-		$('#id_meliscalendar_tool .row .col-md-4').html(calTools1 + calTools2);
-		$('#id_meliscalendar_tool .row .col-md-8').html(calTools3);
-	} */
 }
 
 // Dashboard Calendar Init
@@ -71,6 +55,11 @@ window.initCalendarTool = function() {
 		revertDuration: 0,  //  original position after the drag,
 		start: function() { if (typeof mainYScroller != 'undefined') mainYScroller.disable(); },
         stop: function() { if (typeof mainYScroller != 'undefined') mainYScroller.enable(); }
+	});
+
+	// mobile FIX to open put text in the box
+	$('.melis-draggable-input').on('click', function() {
+		$(this).focus();
 	});
 	
 	// calendar initialization
@@ -169,12 +158,12 @@ window.initCalendarTool = function() {
 						melisHelper.zoneReload('id_melistoolcalendar_tool_recent_added','melistoolcalendar_tool_recent_added');
 						
 						// Notifications
-						melisHelper.melisOkNotification(data.textTitle, data.textMessage, '#72af46');
+						melisHelper.melisOkNotification(data.textTitle, data.textMessage);
 						melisCore.flashMessenger();
 					}
 				} else {
-					melisCoreTool.alertDanger("#siteaddalert", '', data.textMessage + "<br/>");
-					melisHelper.melisKoNotification(data.textTitle, data.textMessage, data.errors, 'closeByButtonOnly');
+					melisCoreTool.alertDanger("#siteaddalert", '', data.textMessage);
+					melisHelper.melisKoNotification(data.textTitle, data.textMessage, data.errors);
 				}
 			}).fail(function(){
 				alert( translations.tr_meliscore_error_message );
@@ -248,11 +237,11 @@ var calendarTool = {
 	  	}).done(function(data) {
 			if(data.success) {
 				// Notifications
-				melisHelper.melisOkNotification(data.textTitle, data.textMessage, '#72af46');
+				melisHelper.melisOkNotification(data.textTitle, data.textMessage);
 				melisCore.flashMessenger();
 			}else{
-				melisCoreTool.alertDanger("#siteaddalert", '', data.textMessage + "<br/>");
-				melisHelper.melisKoNotification(data.textTitle, data.textMessage, data.errors, 'closeByButtonOnly');
+				melisCoreTool.alertDanger("#siteaddalert", '', data.textMessage);
+				melisHelper.melisKoNotification(data.textTitle, data.textMessage, data.errors);
 			}
 		}).fail(function(){
 			alert( translations.tr_meliscore_error_message );
@@ -278,11 +267,11 @@ var calendarTool = {
 		    		// updating calendar after deleting event
 		    		$('#calendar').fullCalendar('removeEvents',eventId);
 		    		// Notifications
-					melisHelper.melisOkNotification(data.textTitle, data.textMessage, '#72af46');
+					melisHelper.melisOkNotification(data.textTitle, data.textMessage);
 					melisCore.flashMessenger();
 		    	}else{
-		    		melisCoreTool.alertDanger("#siteaddalert", '', data.textMessage + "<br/>");
-					melisHelper.melisKoNotification(data.textTitle, data.textMessage, data.errors, 'closeByButtonOnly');
+		    		melisCoreTool.alertDanger("#siteaddalert", '', data.textMessage);
+					melisHelper.melisKoNotification(data.textTitle, data.textMessage, data.errors);
 		    	}
 			}).fail(function(){
 				alert( translations.tr_meliscore_error_message );
@@ -336,11 +325,11 @@ var calendarTool = {
 				$('#'+calVal_id+'_container').modal('hide');
 				
 				// Notifications
-				melisHelper.melisOkNotification(data.textTitle, data.textMessage, '#72af46');
+				melisHelper.melisOkNotification(data.textTitle, data.textMessage);
 				melisCore.flashMessenger();
 			}else{
-				melisCoreTool.alertDanger("#siteaddalert", '', data.textMessage + "<br/>");
-				melisHelper.melisKoNotification(data.textTitle, data.textMessage, data.errors, 'closeByButtonOnly');
+				melisCoreTool.alertDanger("#siteaddalert", '', data.textMessage);
+				melisHelper.melisKoNotification(data.textTitle, data.textMessage, data.errors);
 			}
 		}).fail(function(){
 			alert( translations.tr_meliscore_error_message );
@@ -415,6 +404,3 @@ var calendarTool = {
 		});
 	}
 }
-
-
-

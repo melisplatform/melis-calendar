@@ -70,18 +70,28 @@ class ToolCalendarController extends AbstractActionController
             $postValues = get_object_vars($request->getPost());
              
             $propertyForm->setData($postValues);
+            
+            
+            if (empty($postValues['cal_id']))
+            {
+                $logTypeCode = 'CALENDAR_EVENT_ADD';
+            }
+            else
+            {
+                $logTypeCode = 'CALENDAR_EVENT_UPDATE';
+            }
              
             if($propertyForm->isValid()) {
                 $calendarService = $this->getServiceLocator()->get('MelisCalendarService');
                 $responseData = $calendarService->addCalendarEvent($postValues);
                 
                 if (!empty($responseData)){
-                    $textMessage = $translator->translate('tr_melistoolcalendar_save_event_success');
+                    $textMessage = 'tr_melistoolcalendar_save_event_success';
                     $status = 1;
                 }
             }else{
                 $errors = $propertyForm->getMessages();
-                $textMessage = $translator->translate('tr_melistoolcalendar_form_event_error_msg');
+                $textMessage = 'tr_melistoolcalendar_form_event_error_msg';
             }
              
             $appConfigForm = $appConfigForm['elements'];
@@ -99,27 +109,35 @@ class ToolCalendarController extends AbstractActionController
          
         $response = array(
             'success' => $status,
-            'textTitle' => $translator->translate('tr_melistoolcalendar_save_event_title'),
+            'textTitle' => 'tr_melistoolcalendar_save_event_title',
             'textMessage' => $textMessage,
             'errors' => $errors,
             'event' => $responseData
         );
+        
+        $calId = null;
+        if (!empty($responseData['id']))
+        {
+            $calId = $responseData['id'];
+        }
          
         if ($status){
-            $this->getEventManager()->trigger('meliscalendar_save_event_end', $this, $response);
+            $this->getEventManager()->trigger('meliscalendar_save_event_end', $this, array_merge($response, array('typeCode' => $logTypeCode, 'itemId' => $calId)));
         }
         
         return new JsonModel($response);
     }
     
-    /* 
+    /**
      * Updating Calendar Event by resizing Calendar item event
+     * @return \Zend\View\Model\JsonModel
      */
     public function reschedEventAction(){
         $translator = $this->getServiceLocator()->get('translator');
         
         $request = $this->getRequest();
         // Default Values
+        $id = null;
         $status  = 0;
         $textMessage = '';
         $errors  = array();
@@ -134,7 +152,8 @@ class ToolCalendarController extends AbstractActionController
                  
                 $calendarTable = $this->getServiceLocator()->get('MelisCalendarTable');
                  
-                $resultEvent = $calendarTable->getEntryById($postValues['cal_id']);
+                $id = $postValues['cal_id'];
+                $resultEvent = $calendarTable->getEntryById($id);
                  
                 if (!empty($resultEvent)){
                      
@@ -146,7 +165,7 @@ class ToolCalendarController extends AbstractActionController
                         $responseData = $calendarService->reschedCalendarEvent($postValues);
                         
                         if (!empty($responseData)){
-                            $textMessage = $translator->translate('tr_melistoolcalendar_save_event_success');
+                            $textMessage = 'tr_melistoolcalendar_save_event_success';
                             $status = 1;
                         }
                     }
@@ -156,26 +175,29 @@ class ToolCalendarController extends AbstractActionController
          
         $response = array(
             'success' => $status,
-            'textTitle' => $translator->translate('tr_melistoolcalendar_save_event_title'),
+            'textTitle' => 'tr_melistoolcalendar_save_event_title',
             'textMessage' => $textMessage,
             'errors' => $errors,
         );
         
         if ($status){
-            $this->getEventManager()->trigger('meliscalendar_save_event_end', $this, $response);
+            $this->getEventManager()->trigger('meliscalendar_save_event_end', $this, array_merge($response, array('typeCode' => 'CALENDAR_EVENT_DRAG', 'itemId' => $id)));
         }
          
         return new JsonModel($response);
     }
     
-    /*  
+    /**
      * Deleting Calendar item event
+     * 
+     * @return \Zend\View\Model\JsonModel
      */
     public function deleteEventAction(){
         $translator = $this->getServiceLocator()->get('translator');
         
         $request = $this->getRequest();
         // Default Values
+        $id = null;
         $status  = 0;
         $textMessage = '';
         $errors  = array();
@@ -189,32 +211,34 @@ class ToolCalendarController extends AbstractActionController
             if (!empty($postValues)){
                  
                 $calendarService = $this->getServiceLocator()->get('MelisCalendarService');
-                $responseData = $calendarService->deleteCalendarEvent($postValues);
-                if (!empty($responseData)){
-                    $textMessage = $translator->translate('tr_melistoolcalendar_delete_event_success');
+                $id = $responseData = $calendarService->deleteCalendarEvent($postValues);
+                if (!is_null($id)){
+                    $textMessage = 'tr_melistoolcalendar_delete_event_success';
                     $status  = 1;
                 }else{
-                    $textMessage = $translator->translate('tr_melistoolcalendar_delete_event_unable');
+                    $textMessage = 'tr_melistoolcalendar_delete_event_unable';
                 }
             }
         }
          
         $response = array(
             'success' => $status,
-            'textTitle' => $translator->translate('tr_melistoolcalendar_delete_event_title'),
+            'textTitle' => 'tr_melistoolcalendar_delete_event_title',
             'textMessage' => $textMessage,
             'errors' => $errors,
         );
         
         if ($status){
-            $this->getEventManager()->trigger('meliscalendar_save_event_end', $this, $response);
+            $this->getEventManager()->trigger('meliscalendar_save_event_end', $this, array_merge($response, array('typeCode' => 'CALENDAR_EVENT_DELETE', 'itemId' => $id)));
         }
          
         return new JsonModel($response);
     }
     
-    /* 
+    /**
      * Retrieving Calendar item event data for updating
+     * 
+     * @return \Zend\View\Model\JsonModel
      */
     public function getEventTitleAction(){
         $translator = $this->getServiceLocator()->get('translator');
