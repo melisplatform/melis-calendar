@@ -82,11 +82,4 @@ return array(
             'ViewJsonStrategy',
         ),
     ),
-    'asset_manager' => array(
-        'resolver_configs' => array(
-            'aliases' => array(
-                'MelisCalendar/' => __DIR__ . '/../public/',
-            ),
-        ),
-    ),
 );
