@@ -22,7 +22,7 @@ class MelisCalendarControllerTest extends AbstractHttpControllerTestCase
         $this->sm  = new ServiceManagerGrabber();
     }
 
-        /**
+    /**
      * Get getCalendarTable table
      * @return mixed
      */
