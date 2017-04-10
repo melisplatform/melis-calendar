@@ -19,7 +19,7 @@
         				<li>
         					<span class="date"><?php echo ($this->locale=='en_EN') ? date('m/d/y',strtotime($event[$i]['cal_date_added'])) : date('d/m/y',strtotime($event[$i]['cal_date_added']))?></span>
         					<span>&nbsp;-&nbsp;</span>
-        					<span class="ellipsis"><span class="text-danger"><?php echo $event[$i]['usr_firstname'].' '.$event[$i]['usr_lastname'] ?></span> : <?php echo $event[$i]['cal_event_title']?></span>
+        					<span class="ellipsis"><span class="text-danger"><?php echo $this->escapeHtml($event[$i]['usr_firstname'].' '.$event[$i]['usr_lastname']); ?></span> : <?php echo $this->escapeHtml($event[$i]['cal_event_title']); ?></span>
         					<div class="clearfix"></div>
         				</li>
 					<?php }?>

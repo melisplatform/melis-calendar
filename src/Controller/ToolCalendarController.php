@@ -64,11 +64,11 @@ class ToolCalendarController extends AbstractActionController
         $formElements = $this->serviceLocator->get('FormElementManager');
         $factory->setFormElementManager($formElements);
         $propertyForm = $factory->createForm($appConfigForm);
-         
+        $melisTool = $this->getServiceLocator()->get('MelisCoreTool');
         if($request->isPost()) {
              
             $postValues = get_object_vars($request->getPost());
-             
+            $postValues = $melisTool->sanitizePost($postValues);
             $propertyForm->setData($postValues);
             
             
