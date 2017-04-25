@@ -20,6 +20,11 @@ return array(
                 ),
             ),
         ),
+        'meliscalendar' => array(
+            'conf' => array(
+                'rightsDisplay' => 'none',
+            ),
+        ),
         'melistoolcalendar' => array(
             'conf' => array(
                 'id' => '',
