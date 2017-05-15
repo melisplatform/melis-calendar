@@ -26,6 +26,13 @@ class CalendarController extends AbstractActionController
     	return $view;
     }
     
+    public function renderTestAction() 
+    {
+        $melisKey = $this->params()->fromRoute('melisKey', '');
+        $view = new ViewModel();
+        $view->melisKey = $melisKey;
+        return $view;
+    }
     
     /*
      * Render Calendar Tool Page

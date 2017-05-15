@@ -96,15 +96,22 @@ class Module
                 'forms',
             );
             
+            $translationList = include 'module/MelisModuleConfig/config/translation.list.php';
+
             foreach($translationType as $type){
                 
-                $transPath = "module/MelisModuleConfig/languages/MelisCalendar/$locale.$type.php";
+                $transPath = '';
+                $moduleTrans = __NAMESPACE__."/$locale.$type.php";
                 
-                if(!file_exists($transPath)){
+                if(in_array($moduleTrans, $translationList)){
+                    $transPath = "module/MelisModuleConfig/languages/".$moduleTrans;
+                }
+
+                if(empty($transPath)){
                     
                     // if translation is not found, use melis default translations
-                    $locale = (file_exists(__DIR__ . "/../language/$locale.$type.php"))? $locale : "en_EN";
-                    $transPath = __DIR__ . "/../language/$locale.$type.php";
+                    $defaultLocale = (file_exists(__DIR__ . "/../language/$locale.$type.php"))? $locale : "en_EN";
+                    $transPath = __DIR__ . "/../language/$defaultLocale.$type.php";
                 }
                 
                 $translator->addTranslationFile('phparray', $transPath);
