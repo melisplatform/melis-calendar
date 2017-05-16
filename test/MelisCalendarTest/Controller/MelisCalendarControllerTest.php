@@ -48,12 +48,6 @@ class MelisCalendarControllerTest extends AbstractHttpControllerTestCase
         $this->assertNotEmpty($data);
     }
 
-    public function testForceTestToFailWhenFetchingData()
-    {
-        $data = $this->getCalendarTable()->fetchAll()->toArray();
-        $this->assertEmpty($data, '<h4>This test is supposed to fail, so just ignore this test.</h4>');
-    }
-
     public function testInsertData()
     {
         $payloads = $this->getPayload(__METHOD__);
