@@ -17,12 +17,14 @@ return array(
 								'name' => 'cal_event_title',
 								'type' => 'MelisCalendarDraggableInput',
 							    'options' => array(
-							      'label' => 'tr_melistoolcalendar_form_event_title'  
+							      'label' => 'tr_melistoolcalendar_form_event_title',
+							      'tooltip' => 'tr_melistoolcalendar_form_event_title tooltip',
 							    ),
 								'attributes' => array(
 									'id' => 'newCalendarEventInt',
 									'value' => '',
 									'placeholder' => 'tr_melistoolcalendar_form_title',
+								    'required' => 'required',
 							    ),
 						    ),
 						),

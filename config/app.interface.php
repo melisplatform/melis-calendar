@@ -79,6 +79,7 @@ return array(
                         'name' => 'tr_melistoolcalendar_tool_calendar',
                         'icon' => 'fa fa-calendar',
                         'rights_checkbox_disable' => true,
+                        'follow_regular_rendering' => false,
                     ),
                     'forward' => array(
                             'module' => 'MelisCalendar',

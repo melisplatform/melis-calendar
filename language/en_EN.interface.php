@@ -1,8 +1,10 @@
 <?php 
 	return array(
 	    'tr_melistoolcalendar_tool_calendar' => 'Calendar',
+	    'tr_melistoolcalendar_tool_calendar_description' => 'This tool allows to place events in a calendar in order to display them on the dashboard.',
 	    // Save Event Messages
 	    'tr_melistoolcalendar_form_event_title' => 'Title',
+	    'tr_melistoolcalendar_form_event_title tooltip' => 'Title of the event to place on the calendar',
 	    'tr_melistoolcalendar_form_create' => 'Create new event',
 	    'tr_melistoolcalendar_form_create_drag' => '*Drag and drop after you entered the event title.',
 	    'tr_melistoolcalendar_form_error_msg' => 'Please enter event title before dragging to calendar',

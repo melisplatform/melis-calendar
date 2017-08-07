@@ -1,8 +1,10 @@
 <?php 
 	return array(
 	    'tr_melistoolcalendar_tool_calendar' => 'Calendrier',
+	    'tr_melistoolcalendar_tool_calendar_description' => 'Cet outil permet de placer des événements dans un calendrier afin qu&#39;ils remontent sur le dashboard.',
 	    // Save Event Messages
 	    'tr_melistoolcalendar_form_event_title' => 'Titre',
+	    'tr_melistoolcalendar_form_event_title tooltip' => 'Titre de l&#39;événement à placer sur le calendrier',
 	    'tr_melistoolcalendar_form_create' => 'Créer un nouvel évènement',
 	    'tr_melistoolcalendar_form_create_drag' => '*Faites glisser après avoir entré un titre',
 	    'tr_melistoolcalendar_form_error_msg' => 'Veuillez saisir un titre avant de faire glisser l\'évènement dans le calendrier',

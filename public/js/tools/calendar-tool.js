@@ -337,7 +337,7 @@ var calendarTool = {
 	},
 	// Go to specific date
 	// This is trigger when updating Calendar Event
-	gotoFCdate(){
+	gotoFCdate: function(){
 		if(fcal_year_client_event!=null&&fcal_month_client_event!=null){
 			$('#calendar').fullCalendar( 'gotoDate', fcal_year_client_event, fcal_month_client_event);
 			// ReInitialize to default value after Executed this function
