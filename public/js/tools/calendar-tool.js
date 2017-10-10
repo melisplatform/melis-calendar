@@ -269,6 +269,9 @@ var calendarTool = {
 		    		// Notifications
 					melisHelper.melisOkNotification(data.textTitle, data.textMessage);
 					melisCore.flashMessenger();
+					
+					// Reload Recent Added Widget
+					melisHelper.zoneReload('id_melistoolcalendar_tool_recent_added','melistoolcalendar_tool_recent_added');
 		    	}else{
 		    		melisCoreTool.alertDanger("#siteaddalert", '', data.textMessage);
 					melisHelper.melisKoNotification(data.textTitle, data.textMessage, data.errors);
