@@ -17,6 +17,11 @@ use Zend\Session\Container;
 
 use MelisCalendar\Listener\MelisCalendarFlashMessengerListener;
 
+/**
+ * Class Module
+ * @package MelisCmsCalendar
+ * @require melis-core
+ */
 class Module
 {
     public function onBootstrap(MvcEvent $e)
