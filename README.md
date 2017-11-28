@@ -19,6 +19,11 @@ Run the composer command:
 composer require melisplatform/melis-calendar
 ```
 
+## Tools & Elements provided
+
+* Dashboard Calendar
+* Calendar Tool
+
 ## Running the code
 
 ### MelisCalendarService  
