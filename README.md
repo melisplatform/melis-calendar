@@ -19,6 +19,14 @@ Run the composer command:
 composer require melisplatform/melis-calendar
 ```
 
+### Database    
+
+Database model is accessible on the MySQL Workbench file:  
+/melis-calendar/install/sql/model  
+Database will be installed through composer and its hooks.  
+In case of problems, SQL files are located here:  
+/melis-calendar/install/sql  
+
 ## Tools & Elements provided
 
 * Dashboard Calendar
