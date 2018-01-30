@@ -101,8 +101,7 @@ return array(
         'invokables' => array(
             'MelisCalendar\Controller\Dashboard' => 'MelisCalendar\Controller\DashboardController',
             'MelisCalendar\Controller\Calendar' => 'MelisCalendar\Controller\CalendarController',
-            'MelisCalendar\Controller\ToolCalendar' => 'MelisCalendar\Controller\ToolCalendarController',
-            'MelisCalendar\Controller\MelisSetup' => 'MelisCalendar\Controller\MelisSetupController',
+            'MelisCalendar\Controller\ToolCalendar' => 'MelisCalendar\Controller\ToolCalendarController'
         ),
     ),
     'form_elements' => array(
