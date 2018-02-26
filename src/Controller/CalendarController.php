@@ -61,7 +61,31 @@ class CalendarController extends AbstractActionController
     	$view->melisKey = $melisKey;
     	return $view;
     }
-    
+
+    /*
+  * Get all calendar data
+  * return array
+  */
+    public function getAllCalendarData()
+    {
+        $success     = 0;
+        $request     = $this->getRequest();
+        $data        = array();
+
+        if($request->isGet())
+        {
+            $calendarData  = $this->getServiceLocator()->get('MelisCalendarService');
+
+            if(!empty($calendarData)){
+                $data    = "";
+                $success = 0;
+
+            }
+        }
+
+        return $data;
+    }
+
     public function renderCalendarToolCalendarContentAction(){
         $melisKey = $this->params()->fromRoute('melisKey', '');
         $view = new ViewModel();
@@ -139,6 +163,5 @@ class CalendarController extends AbstractActionController
         $view->melisKey = $melisKey;
         return $view;
     }
-    
-    
+
 }

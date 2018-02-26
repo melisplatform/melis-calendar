@@ -13,7 +13,7 @@
 	    
 	    // Event Deletion Messages
 	    'tr_melistoolcalendar_delete_event_title' => 'Supprimer un évènement',
-	    'tr_melistoolcalendar_delete_event_confirm' => 'Êtes-vous sur de voulois supprimer cet évènement',
+	    'tr_melistoolcalendar_delete_event_confirm' => 'Êtes-vous sur de vouloir supprimer cet évènement',
 	    'tr_melistoolcalendar_delete_event_success' => 'L\'évènement a été supprimé avec succès',
 	    'tr_melistoolcalendar_delete_event_btn_yes' => 'Oui',
 	    'tr_melistoolcalendar_delete_event_btn_no' => 'Non',

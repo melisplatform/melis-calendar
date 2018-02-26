@@ -32,4 +32,17 @@ class DashboardController extends AbstractActionController
         $view->melisKey = $melisKey;
         return $view;
     }
+    /**
+     * Rending the dashboard data
+     *
+     * @return \Zend\View\Model\ViewModel
+     */
+    public function renderDashboardDataAction()
+    {
+        $melisKey       = "";
+        $view           = new ViewModel();
+        $view->melisKey = $melisKey;
+
+        return $view;
+    }
 }

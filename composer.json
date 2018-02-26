@@ -4,9 +4,19 @@
   "license": "OSL-3.0",
   "homepage": "https://github.com/melisplatform/melis-calendar",
   "support": {
+	"email": "contact@melistechnology.com",
     "source": "https://github.com/melisplatform/melis-calendar",
-    "issues": "https://github.com/melisplatform/melis-calendar/issues"
+    "issues": "https://github.com/melisplatform/melis-calendar/issues",
+	"docs": "https://www.melistechnology.com/melistechnology/resources/download-documentation/id/17#documentation"
   },
+  "authors": [
+	{
+		"name": "Melis Technology",
+		"email": "contact@melistechnology.com",
+		"homepage": "https://www.melistechnology.com",
+		"role": "Developer"
+	}
+  ],
   "keywords": [
     "cms",
     "melis",
@@ -14,10 +24,16 @@
     "module"
   ],
   "extra": {
-    "module-name": "MelisCalendar"
+    "module-name": "MelisCalendar",
+    "dbdeploy": true
   },
   "require": {
-    "php": "^5.5 || ^7.0"
+    "php": "^5.5 || ^7.0",
+    "ext-openssl": "*",
+    "ext-json": "*",
+    "ext-pdo_mysql": "*",
+    "melisplatform/melis-core": "~2.2.7",
+    "justinrainbow/json-schema": "5.2.1"
   },
   "autoload": {
     "psr-4": {

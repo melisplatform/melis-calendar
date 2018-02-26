@@ -127,7 +127,38 @@ class ToolCalendarController extends AbstractActionController
         
         return new JsonModel($response);
     }
-    
+
+    /**
+     * Retrieving Calendar searched item event data for updating
+     */
+    public function searchCalendarEventAction(){
+        $translator = $this->getServiceLocator()->get('translator');
+        $textMessage = '';
+        $request = $this->getRequest();
+        // Default Values
+        $id = null;
+
+        if($request->isPost()) {
+
+            $postValues = get_object_vars($request->getPost());
+
+            if (!empty($postValues)){
+
+                $calendarService = $this->getServiceLocator()->get('MelisCalendarService');
+                $id = $responseData = $calendarService->deleteCalendarEvent($postValues);
+            }
+        }
+
+        $response = array(
+            'success' => '0',
+            'textTitle' => 'tr_melistoolcalendar_delete_event_title',
+            'textMessage' => $textMessage,
+            'errors' => $errors,
+        );
+
+        return new JsonModel($response);
+    }
+
     /**
      * Updating Calendar Event by resizing Calendar item event
      * @return \Zend\View\Model\JsonModel
@@ -284,4 +315,5 @@ class ToolCalendarController extends AbstractActionController
          
         return new JsonModel($response);
     }
+
 }

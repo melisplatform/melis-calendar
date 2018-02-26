@@ -40,6 +40,47 @@ return array(
                     ),
                 ),    
         	),
+            /*
+           * This route will handle the
+           * alone setup of a module
+           */
+            'setup-melis-calendar' => array(
+                'type'    => 'Literal',
+                'options' => array(
+                    'route'    => '/MelisCalendar',
+                    'defaults' => array(
+                        '__NAMESPACE__' => 'MelisCalendar\Controller',
+                        'controller'    => '',
+                        'action'        => '',
+                    ),
+                ),
+                'may_terminate' => true,
+                'child_routes' => array(
+                    'default' => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route'    => '/[:controller[/:action]]',
+                            'constraints' => array(
+                                'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
+                            ),
+                            'defaults' => array(
+//
+                            ),
+                        ),
+                    ),
+                    'setup' => array(
+                        'type' => 'Segment',
+                        'options' => array(
+                            'route' => '/setup',
+                            'defaults' => array(
+                                'controller' => 'MelisCalendar\Controller\MelisSetup',
+                                'action' => 'setup-form',
+                            ),
+                        ),
+                    ),
+                ),
+            ),
         ),
     ),
     'translator' => array(
@@ -60,7 +101,7 @@ return array(
         'invokables' => array(
             'MelisCalendar\Controller\Dashboard' => 'MelisCalendar\Controller\DashboardController',
             'MelisCalendar\Controller\Calendar' => 'MelisCalendar\Controller\CalendarController',
-            'MelisCalendar\Controller\ToolCalendar' => 'MelisCalendar\Controller\ToolCalendarController',
+            'MelisCalendar\Controller\ToolCalendar' => 'MelisCalendar\Controller\ToolCalendarController'
         ),
     ),
     'form_elements' => array(
