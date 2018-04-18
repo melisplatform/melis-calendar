@@ -33,18 +33,30 @@ return array(
             ),
             'ressources' => array(
                 'js' => array(
-                    //'MelisCore/assets/components/modules/admin/calendar/assets/lib/js/fullcalendar.min.js?v=v1.2.3',
-                    'MelisCalendar/plugins/fullcalendar.min.js',
-//                     'MelisCalendar/plugins/moment/moment.min.js',
-//                     'MelisCalendar/plugins/full-calendar/fullcalendar.min.js',
-                    'MelisCalendar/js/tools/calendar-tool.js',
+                    '/MelisCalendar/plugins/fullcalendar.min.js',
+                    '/MelisCalendar/js/tools/calendar-tool.js',
                 ),
                 'css' => array(
-                    //'/MelisCore/assets/components/modules/admin/calendar/assets/lib/css/fullcalendar.css',
-                    'MelisCalendar/plugins/fullcalendar.css',
-//                     'MelisCalendar/plugins/full-calendar/fullcalendar.css',
-                    'MelisCalendar/css/calendar.css'
+                    '/MelisCalendar/plugins/fullcalendar.css',
+                    '/MelisCalendar/css/calendar.css'
                 ),
+                /**
+                 * the "build" configuration compiles all assets into one file to make
+                 * lesser requests
+                 */
+                'build' => [
+                    // configuration to override "use_build_assets" configuration, if you want to use the normal assets for this module.
+                    'disable_bundle' => false,
+
+                    // lists of assets that will be loaded in the layout
+                    'css' => [
+                        '/MelisCalendar/build/css/bundle.css',
+
+                    ],
+                    'js' => [
+                        '/MelisCalendar/build/js/bundle.js',
+                    ]
+                ]
             ),
             'datas' => array(
                 
