@@ -1,0 +1,34 @@
+<melis-calendar>
+	<package_info>
+		<mp_title>Melis Calendar</mp_title>
+		<mp_subtitle>A calendar accessible to all contributors to schedule events.</mp_subtitle>
+		<mp_description>
+			MelisCalendar brings a drag'n'drop system to create events in a calendar.<br />
+			The calendar works with events on multiple days and time and displays a dashboard element so that anyone can be aware after login.
+		</mp_description>
+		<mp_maintainers>melisplatform</mp_maintainers>
+		<mp_group>Melis Core</mp_group>
+	</package_info>
+	<package_images>
+		<img_1>
+			<mpi_image_title>MelisCalendar's tool</mpi_image_title>
+			<mpi_image_file>melis-calendar-1.JPG</mpi_image_file>
+			<mpi_image_main>1</mpi_image_main>
+		</img_1>
+		<img_2>
+			<mpi_image_title>MelisCalendar's edition of event</mpi_image_title>
+			<mpi_image_file>melis-calendar-2.JPG</mpi_image_file>
+			<mpi_image_main>0</mpi_image_main>
+		</img_2>
+		<img_3>
+			<mpi_image_title>MelisCalendar in tablet mode</mpi_image_title>
+			<mpi_image_file>melis-calendar-3.JPG</mpi_image_file>
+			<mpi_image_main>0</mpi_image_main>
+		</img_3>
+		<img_4>
+			<mpi_image_title>MelisCalendar's dashboard element</mpi_image_title>
+			<mpi_image_file>melis-calendar-4.JPG</mpi_image_file>
+			<mpi_image_main>0</mpi_image_main>
+		</img_4>
+	</package_images>
+</melis-calendar>
