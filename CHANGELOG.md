@@ -5,10 +5,9 @@ All notable changes to this project will be documented in this file.
 ### Added  
  
 ### Changed  
-* composer.json and dependencies  
 
 ### Removed  
 
 
-## [2.2.1] - 2017-10-17
-Latest stable version
+## [v2.4.0] - 2018-05-03
+* Added bundled CSS and JS
