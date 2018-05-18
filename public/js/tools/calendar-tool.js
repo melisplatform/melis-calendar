@@ -1,26 +1,3 @@
-$(function(){
-	initDashboardCalendar();
-	// bidning tool action
-	$("body").on("click", ".delete-event", function(e){ 
-		// deleting event using event item delete button
-		calendarTool.deleteEvent($(this).data('id'));
-	});
-	$("body").on("click", ".update-event", function(e){ 
-		// editing event title
-		// this action will appear the modal for updating event title
-		calendarTool.editEventTitle($(this).data('id'));
-	});
-	$("body").on("click", ".btnSaveEventTitle", function(e){
-		// saving event title from modal
-		calendarTool.saveEventTitle($(this).data('id'));
-	});	
-});
-
-// Responsive During Resize
-$(window).on('resize',function(){
-	responsiveCalendar();
-});
-
 // Responsive Function
 function responsiveCalendar(){
 	if( $(window).width() <= 991){
@@ -364,7 +341,7 @@ var calendarTool = {
 			});
 			
 			//Datepicker inline initialization
-			$('#dashbaorad-calendar-tool').datepicker({ 
+			$('.dashbaorad-calendar-tool').datepicker({ 
 				format: "yyyy-mm-dd",
 				inline: true,
 				showOtherMonths:true,
@@ -407,3 +384,26 @@ var calendarTool = {
 		});
 	}
 }
+
+$(function(){
+	initDashboardCalendar();
+	// bidning tool action
+	$("body").on("click", ".delete-event", function(e){ 
+		// deleting event using event item delete button
+		calendarTool.deleteEvent($(this).data('id'));
+	});
+	$("body").on("click", ".update-event", function(e){ 
+		// editing event title
+		// this action will appear the modal for updating event title
+		calendarTool.editEventTitle($(this).data('id'));
+	});
+	$("body").on("click", ".btnSaveEventTitle", function(e){
+		// saving event title from modal
+		calendarTool.saveEventTitle($(this).data('id'));
+	});	
+});
+
+// Responsive During Resize
+$(window).on('resize',function(){
+	responsiveCalendar();
+});

@@ -163,25 +163,5 @@ return array(
                 ),
             ),
         ),
-        'meliscore_dashboard' => array(
-            'interface' => array(
-                'meliscore_dashboard_calendar' => array(
-                    'conf' => array(
-                        'id' => 'id_meliscore_dashboard_calendar',
-                        'name' => 'tr_meliscore_center_dashboard_Calendar',
-                        'melisKey' => 'meliscore_dashboard_calendar',
-                        'width' => 6,
-                        'height' => 'dashboard-medium',
-                    ),
-                    'forward' => array(
-                        'module' => 'MelisCalendar',
-                        'controller' => 'Dashboard',
-                        'action' => 'calendar',
-                        'jscallback' => 'initDashboardCalendar();',
-                        'jsdatas' => array()
-                    ),
-                ),
-            )
-        )
     ),
 );

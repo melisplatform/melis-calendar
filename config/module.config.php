@@ -99,10 +99,14 @@ return array(
     ),
     'controllers' => array(
         'invokables' => array(
-            'MelisCalendar\Controller\Dashboard' => 'MelisCalendar\Controller\DashboardController',
             'MelisCalendar\Controller\Calendar' => 'MelisCalendar\Controller\CalendarController',
             'MelisCalendar\Controller\ToolCalendar' => 'MelisCalendar\Controller\ToolCalendarController'
         ),
+    ),
+    'controller_plugins' => array(
+        'invokables' => array(
+            'MelisCalendarEventsPlugin' => 'MelisCalendar\Controller\DashboardPlugins\MelisCalendarEventsPlugin',
+        )
     ),
     'form_elements' => array(
         'factories' => array(
@@ -115,6 +119,9 @@ return array(
         'doctype'                  => 'HTML5',
         'template_map' => array(
             'layout/layout' => __DIR__ . '/../view/layout/default.phtml',
+            
+            // Dashboard plugin templates
+            'melis-calendar/dashboard/calendar-events' => __DIR__ . '/../view/melis-calendar/dashboard-plugins/calendar-events.phtml',
         ),
         'template_path_stack' => array(
             __DIR__ . '/../view',

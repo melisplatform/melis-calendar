@@ -2,6 +2,12 @@
 	return array(
 	    'tr_melistoolcalendar_tool_calendar' => 'Calendrier',
 	    'tr_melistoolcalendar_tool_calendar_description' => 'Cet outil permet de placer des événements dans un calendrier afin qu&#39;ils remontent sur le dashboard.',
+	    
+	    // Dashborad plugin
+	    'tr_PluginSection_meliscalendar' => 'Calendrier',
+	    'tr_meliscalendar_dashboard' => 'Calendrier',
+	    'tr_meliscalendar_dashboard_description' => 'Cet outil permet de placer des événements dans un calendrier afin qu&#39;ils remontent sur le dashboard.',
+	    
 	    // Save Event Messages
 	    'tr_melistoolcalendar_form_event_title' => 'Titre',
 	    'tr_melistoolcalendar_form_event_title tooltip' => 'Titre de l&#39;événement à placer sur le calendrier',

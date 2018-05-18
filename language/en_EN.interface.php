@@ -2,6 +2,12 @@
 	return array(
 	    'tr_melistoolcalendar_tool_calendar' => 'Calendar',
 	    'tr_melistoolcalendar_tool_calendar_description' => 'This tool allows to place events in a calendar in order to display them on the dashboard.',
+	    
+	    // Dashborad plugin
+	    'tr_PluginSection_meliscalendar' => 'Calendar',
+	    'tr_meliscalendar_dashboard' => 'Calendar',
+	    'tr_meliscalendar_dashboard_description' => 'This tool allows to place events in a calendar in order to display them on the dashboard.',
+	    
 	    // Save Event Messages
 	    'tr_melistoolcalendar_form_event_title' => 'Title',
 	    'tr_melistoolcalendar_form_event_title tooltip' => 'Title of the event to place on the calendar',
