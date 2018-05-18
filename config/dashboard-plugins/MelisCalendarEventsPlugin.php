@@ -14,7 +14,7 @@
                         'name' => 'tr_meliscalendar_dashboard',
                         'description' => 'tr_meliscalendar_dashboard_description',
                         'icon' => 'fa fa-calendar',
-                        'thumbnail' => '',
+                        'thumbnail' => '/MelisCalendar/plugins/images/MelisCalendarEventsPlugin.jpg',
                         'jscallback' => '',
                         'height' => 4,
                         
