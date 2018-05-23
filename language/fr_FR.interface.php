@@ -4,7 +4,7 @@
 	    'tr_melistoolcalendar_tool_calendar_description' => 'Cet outil permet de placer des événements dans un calendrier afin qu&#39;ils remontent sur le dashboard.',
 	    
 	    // Dashborad plugin
-	    'tr_PluginSection_meliscalendar' => 'Calendrier',
+	    'tr_PluginSection_meliscalendar' => 'Melis Calendrier',
 	    'tr_meliscalendar_dashboard' => 'Calendrier',
 	    'tr_meliscalendar_dashboard_description' => 'Cet outil permet de placer des événements dans un calendrier afin qu&#39;ils remontent sur le dashboard.',
 	    
