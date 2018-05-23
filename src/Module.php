@@ -64,7 +64,7 @@ class Module
 			include __DIR__ . '/../config/diagnostic.config.php',
             include __DIR__ . '/../config/app.tools.php',
     	    
-            include __DIR__ . '/../config/dashboard-plugins/MelisCalendarEventsPlugin.php',
+            include __DIR__ . '/../config/dashboard-plugins/MelisCalendarEventsPlugin.config.php',
     	);
     	
     	foreach ($configFiles as $file) {
