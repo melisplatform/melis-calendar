@@ -15,7 +15,7 @@
                         'description' => 'tr_meliscalendar_dashboard_description',
                         'icon' => 'fa fa-calendar',
                         'thumbnail' => '/MelisCalendar/plugins/images/MelisCalendarEventsPlugin.jpg',
-                        'jscallback' => '',
+                        'jscallback' => 'initDashboardCalendar()',
                         'height' => 4,
                         
                         'interface' => array(
@@ -23,14 +23,12 @@
                                 'forward' => array(
                                     'module' => 'MelisCalendar',
                                     'plugin' => 'MelisCalendarEventsPlugin',
-                                    'function' => 'calendarEvents',
-                                    'jscallback' => 'initDashboardCalendar()',
-                                    'jsdatas' => array()
-                                ),
-                            ),
+                                    'function' => 'calendarEvents'
+                                )
+                            )
                         )
                     )
-                ),
+                )
             )
-        ),
+        )
     );
