@@ -7,7 +7,7 @@ return array(
             'interface' => array(
                 'meliscore_leftmenu' => array(
                     'interface' => array(
-                        'melismarketing_toolstree_section' => array(
+                        'meliscore_toolstree' => array(
                             'interface' => array(
                                 'meliscalendar_leftnemu' =>  array(
                                     'conf' => array(
