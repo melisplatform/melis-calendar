@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 return array(
     'plugins' => array(
@@ -59,7 +59,7 @@ return array(
                 ]
             ),
             'datas' => array(
-                
+
             ),
             'interface' => array(
                 'melistoolcalendar_cof' => array(
@@ -94,11 +94,11 @@ return array(
                         'follow_regular_rendering' => false,
                     ),
                     'forward' => array(
-                            'module' => 'MelisCalendar',
-                            'controller' => 'Calendar',
-                            'action' => 'render-calendar',
-                            'jscallback' => '',
-                            'jsdatas' => array()
+                        'module' => 'MelisCalendar',
+                        'controller' => 'Calendar',
+                        'action' => 'render-calendar',
+                        'jscallback' => '',
+                        'jsdatas' => array()
                     ),
                     'interface' => array(
                         'melistoolcalendar_tool_calendar_content' => array(

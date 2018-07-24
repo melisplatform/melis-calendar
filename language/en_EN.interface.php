@@ -37,7 +37,7 @@
 	    'tr_melistoolcalendar_fullcalendar_jun' => 'June',
 	    'tr_melistoolcalendar_fullcalendar_jul' => 'July',
 	    'tr_melistoolcalendar_fullcalendar_aug' => 'August',
-	    'tr_melistoolcalendar_fullcalendar_sep' => 'Septempber',
+	    'tr_melistoolcalendar_fullcalendar_sep' => 'September',
 	    'tr_melistoolcalendar_fullcalendar_oct' => 'October',
 	    'tr_melistoolcalendar_fullcalendar_nov' => 'November',
 	    'tr_melistoolcalendar_fullcalendar_dec' => 'December',
