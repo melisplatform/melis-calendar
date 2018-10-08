@@ -49,11 +49,6 @@ class Module
         $this->createTranslations($e);
     }
     
-    public function init(ModuleManager $manager)
-    {
-        
-    }
-
     public function getConfig()
     {
     	$config = array();
