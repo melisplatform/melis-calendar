@@ -1,1 +1,5 @@
-<div class="dashbaorad-calendar-tool"></div>
+<?php if($this->isAccessable) {?>
+    <div class="dashbaorad-calendar-tool"></div>
+<?php } else {?>
+    <span><?= $this->translate('tr_melisdashboardplugin_plugin_no_rights'); ?></span>
+<?php } ?>
