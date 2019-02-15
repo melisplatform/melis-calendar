@@ -4,9 +4,6 @@ return array(
         'meliscore' => [
             'interface' => [
                 'melis_dashboardplugin' => [
-                    'conf' => [
-                        'dashboard_plugin' => true
-                    ],
                     'interface' => [
                         'melisdashboardplugin_section' => [
                             'interface' => [
