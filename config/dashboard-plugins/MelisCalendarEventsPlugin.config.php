@@ -40,7 +40,7 @@ return array(
                         'jscallback' => 'initDashboardCalendar()',
                         'max_lines' => 8,
                         'height' => 4,
-                        'width' => 4,
+                        'width' => 6,
                         'x-axis' => 0,
                         'y-axis' => 0,
                     ],
