@@ -28,7 +28,7 @@ return array(
             'interface' => [
                 'MelisCalendarEventsPlugin' => array(
                     'conf' => [
-                        'name' => 'tr_meliscalendar_dashboard',
+                        'name' => 'MelisCalendarEventsPlugin',
                         'melisKey' => 'MelisCalendarEventsPlugin'
                     ],
                     'datas' => [
