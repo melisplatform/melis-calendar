@@ -17,7 +17,7 @@
                         'thumbnail' => '/MelisCalendar/plugins/images/MelisCalendarEventsPlugin.jpg',
                         'jscallback' => 'initDashboardCalendar()',
                         'height' => 4,
-                        
+                        'section' => 'MelisCore',
                         'interface' => array(
                             'meliscalendar_events' => array(
                                 'forward' => array(
