@@ -23,8 +23,17 @@ class MelisCalendarEventsPlugin extends MelisCoreDashboardTemplatingPlugin
     
     public function calendarEvents()
     {
+        /** @var \MelisCore\Service\MelisCoreDashboardPluginsRightsService $dashboardPluginsService */
+        $dashboardPluginsService = $this->getServiceLocator()->get('MelisCoreDashboardPluginsService');
+        //get the class name to make it as a key to the plugin
+        $path = explode('\\', __CLASS__);
+        $className = array_pop($path);
+
+        $isAccessible = $dashboardPluginsService->canAccess($className);
+
         $view = new ViewModel();
         $view->setTemplate('melis-calendar/dashboard/calendar-events');
+        $view->isAccessable = $isAccessible;
         return $view;
     }
 }
