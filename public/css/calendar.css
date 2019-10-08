@@ -63,6 +63,14 @@
     text-overflow: ellipsis;
 }
 
+.fc-event-container {
+    width: 100%;
+}
+
+.fc-event-container .fc-event.fc-event-start:not(.ui-draggable) {
+    width: 100% !important;
+}
+
 @media ( max-width: 991px ) {
 	.fc-header td {
 		white-space: normal; 
