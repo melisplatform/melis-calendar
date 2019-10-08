@@ -67,6 +67,18 @@
     width: 100%;
 }
 
+.fc-event-container .fc-event:not(.fc-event-end) {
+    width: 100% !important;
+}
+
+.fc-event-container .fc-event:not(.fc-event-start) {
+    width: 100% !important;
+}
+
+.fc-event-container .fc-event.fc-event-end:not(.fc-event-start) {
+    width: 100% !important;
+}
+
 .fc-event-container .fc-event.fc-event-start:not(.fc-event-end) {
     width: 100% !important;
 }
