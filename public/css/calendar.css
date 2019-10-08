@@ -67,7 +67,7 @@
     width: 100%;
 }
 
-.fc-event-container .fc-event.fc-event-start:not(.ui-draggable) {
+.fc-event-container .fc-event.fc-event-start:not(.fc-event-end) {
     width: 100% !important;
 }
 
