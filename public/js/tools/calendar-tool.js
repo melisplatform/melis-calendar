@@ -419,7 +419,16 @@ $(function() {
 
 				// saving event title from modal
 				calendarTool.saveEventTitle( $this.data('id') );
-		});	
+		});
+
+		$body.on("keyup keypress", "#idformcalendar", function(e) {
+			var keyCode = e.keyCode || e.which;
+
+				if (keyCode === 13) { 
+					e.preventDefault();
+					return false;
+				}
+		});
 });
 
 // Responsive During Resize
