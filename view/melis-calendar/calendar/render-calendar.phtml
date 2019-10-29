@@ -23,17 +23,19 @@
 		<div class="container-fluid">
 			<div class="row">
 				<div class="col-xs-12 col-md-4 no-gutters">
+					<!-- d-none d-md-block -->
 					<div class="create-new-event">
-						<!-- d-none d-md-block -->
 						<?php echo $this->melistoolcalendar_tool_create_form; ?>
 					</div>
-                    <?php echo $this->melistoolcalendar_tool_recent_added; ?>
+					<div class="recently-added d-none d-md-block">
+						<?php echo $this->melistoolcalendar_tool_recent_added; ?>
+					</div>
                 </div>   
                 <div class="col-xs-12 col-md-8 no-gutters">
-					<!-- <div class="create-new-event d-block d-md-none">
-						<?php //echo $this->melistoolcalendar_tool_create_form; ?>
-					</div> -->
-                    <?php echo $this->melistoolcalendar_tool_calendar_content;?>
+					<?php echo $this->melistoolcalendar_tool_calendar_content;?>
+					<div class="recently-added d-block d-md-none">
+						<?php echo $this->melistoolcalendar_tool_recent_added; ?>
+					</div>
                 </div>
             </div>
         </div>
