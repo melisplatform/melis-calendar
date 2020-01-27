@@ -97,7 +97,8 @@
 
 }
 .dashbaorad-calendar-tool .datepicker-inline {
-    width: 220px;
+    /* width: 220px; */
+    width: 100%;
 }
 .dashbaorad-calendar-tool .datepicker.datepicker-rtl {
     direction: rtl;
