@@ -67,7 +67,7 @@ class ToolCalendarController extends AbstractActionController
         $melisTool = $this->getServiceLocator()->get('MelisCoreTool');
         if($request->isPost()) {
              
-            $postValues = get_object_vars($request->getPost());
+            $postValues = $request->getPost();
             $postValues = $melisTool->sanitizePost($postValues);
             $propertyForm->setData($postValues);
             
@@ -140,7 +140,7 @@ class ToolCalendarController extends AbstractActionController
 
         if($request->isPost()) {
 
-            $postValues = get_object_vars($request->getPost());
+            $postValues = $request->getPost();
 
             if (!empty($postValues)){
 
@@ -177,7 +177,7 @@ class ToolCalendarController extends AbstractActionController
          
         if($request->isPost()) {
              
-            $postValues = get_object_vars($request->getPost());
+            $postValues = $request->getPost();
              
             if (!empty($postValues)){
                  
@@ -237,7 +237,7 @@ class ToolCalendarController extends AbstractActionController
          
         if($request->isPost()) {
              
-            $postValues = get_object_vars($request->getPost());
+            $postValues = $request->getPost();
              
             if (!empty($postValues)){
                  
@@ -286,7 +286,7 @@ class ToolCalendarController extends AbstractActionController
          
         if($request->isPost()) {
              
-            $postValues = get_object_vars($request->getPost());
+            $postValues = $request->getPost();
              
             if (!empty($postValues)){
                  
