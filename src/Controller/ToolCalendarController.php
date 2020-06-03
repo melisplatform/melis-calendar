@@ -9,8 +9,8 @@
 
 namespace MelisCalendar\Controller;
 
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\JsonModel;
+use MelisCore\Controller\AbstractActionController;
+use Laminas\View\Model\JsonModel;
 
 /**
  * This controller handles the calendar tool
@@ -18,34 +18,48 @@ use Zend\View\Model\JsonModel;
 class ToolCalendarController extends AbstractActionController
 {
     /**
+     * get calendar table
+     *
+     */
+    private function getCalendarTable()
+    {
+        return $this->getServiceManager()->get('MelisCalendarTable');
+    }
+
+    /**
      * Retrive Calendar Event to initialize calender uifor Dashboard Calendar
      * 
-     * @return \Zend\View\Model\JsonModel
+     * @return \Laminas\View\Model\JsonModel
      */
-    public function retrieveDashboardCalendarEventsAction(){
-        $calendarTable = $this->getServiceLocator()->get('MelisCalendarTable');
+    public function retrieveDashboardCalendarEventsAction()
+    {
+        $calendarTable = $this->getCalendarTable();
         $result = $calendarTable->retrieveDashboardCalendarEvents();
+
         return new JsonModel($result->toArray());
     }
-    
+
     /**
      * Retrieve Calendar Event to initialize calender ui
      * 
-     * @return \Zend\View\Model\JsonModel
+     * @return \Laminas\View\Model\JsonModel
      */
-    public function retrieveCalendarEventsAction(){
-        $calendarTable = $this->getServiceLocator()->get('MelisCalendarTable');
+    public function retrieveCalendarEventsAction()
+    {
+        $calendarTable = $this->getCalendarTable();
         $result = $calendarTable->retrieveCalendarEvents();
+
         return new JsonModel($result->toArray());
     }
     
     /**
      * This action will save an event to the calendar
      * 
-     * @return \Zend\View\Model\JsonModel
+     * @return \Laminas\View\Model\JsonModel
      */
     public function saveEventAction(){
-        $translator = $this->getServiceLocator()->get('translator');
+
+        $translator = $this->getServiceManager()->get('translator');
         
         $request = $this->getRequest();
         // Default Values
@@ -56,15 +70,15 @@ class ToolCalendarController extends AbstractActionController
          
         $responseData = array();
          
-        $melisMelisCoreConfig = $this->serviceLocator->get('MelisCoreConfig');
+        $melisMelisCoreConfig = $this->getServiceManager()->get('MelisCoreConfig');
          
         $appConfigForm = $melisMelisCoreConfig->getFormMergedAndOrdered('meliscalendar/forms/melicalendar_event_form','melicalendar_event_form');
          
-        $factory = new \Zend\Form\Factory();
-        $formElements = $this->serviceLocator->get('FormElementManager');
+        $factory = new \Laminas\Form\Factory();
+        $formElements = $this->getServiceManager()->get('FormElementManager');
         $factory->setFormElementManager($formElements);
         $propertyForm = $factory->createForm($appConfigForm);
-        $melisTool = $this->getServiceLocator()->get('MelisCoreTool');
+        $melisTool = $this->getServiceManager()->get('MelisCoreTool');
         if($request->isPost()) {
              
             $postValues = get_object_vars($request->getPost());
@@ -82,7 +96,7 @@ class ToolCalendarController extends AbstractActionController
             }
              
             if($propertyForm->isValid()) {
-                $calendarService = $this->getServiceLocator()->get('MelisCalendarService');
+                $calendarService = $this->getServiceManager()->get('MelisCalendarService');
                 $responseData = $calendarService->addCalendarEvent($postValues);
                 
                 if (!empty($responseData)){
@@ -132,7 +146,7 @@ class ToolCalendarController extends AbstractActionController
      * Retrieving Calendar searched item event data for updating
      */
     public function searchCalendarEventAction(){
-        $translator = $this->getServiceLocator()->get('translator');
+        $translator = $this->getServiceManager()->get('translator');
         $textMessage = '';
         $request = $this->getRequest();
         // Default Values
@@ -144,7 +158,7 @@ class ToolCalendarController extends AbstractActionController
 
             if (!empty($postValues)){
 
-                $calendarService = $this->getServiceLocator()->get('MelisCalendarService');
+                $calendarService = $this->getServiceManager()->get('MelisCalendarService');
                 $id = $responseData = $calendarService->deleteCalendarEvent($postValues);
             }
         }
@@ -161,10 +175,10 @@ class ToolCalendarController extends AbstractActionController
 
     /**
      * Updating Calendar Event by resizing Calendar item event
-     * @return \Zend\View\Model\JsonModel
+     * @return \Laminas\View\Model\JsonModel
      */
     public function reschedEventAction(){
-        $translator = $this->getServiceLocator()->get('translator');
+        $translator = $this->getServiceManager()->get('translator');
         
         $request = $this->getRequest();
         // Default Values
@@ -181,7 +195,7 @@ class ToolCalendarController extends AbstractActionController
              
             if (!empty($postValues)){
                  
-                $calendarTable = $this->getServiceLocator()->get('MelisCalendarTable');
+                $calendarTable = $this->getServiceManager()->get('MelisCalendarTable');
                  
                 $id = $postValues['cal_id'];
                 $resultEvent = $calendarTable->getEntryById($id);
@@ -192,7 +206,7 @@ class ToolCalendarController extends AbstractActionController
                      
                     if (!empty($event)){
                          
-                        $calendarService = $this->getServiceLocator()->get('MelisCalendarService');
+                        $calendarService = $this->getServiceManager()->get('MelisCalendarService');
                         $responseData = $calendarService->reschedCalendarEvent($postValues);
                         
                         if (!empty($responseData)){
@@ -221,10 +235,10 @@ class ToolCalendarController extends AbstractActionController
     /**
      * Deleting Calendar item event
      * 
-     * @return \Zend\View\Model\JsonModel
+     * @return \Laminas\View\Model\JsonModel
      */
     public function deleteEventAction(){
-        $translator = $this->getServiceLocator()->get('translator');
+        $translator = $this->getServiceManager()->get('translator');
         
         $request = $this->getRequest();
         // Default Values
@@ -241,7 +255,7 @@ class ToolCalendarController extends AbstractActionController
              
             if (!empty($postValues)){
                  
-                $calendarService = $this->getServiceLocator()->get('MelisCalendarService');
+                $calendarService = $this->getServiceManager()->get('MelisCalendarService');
                 $id = $responseData = $calendarService->deleteCalendarEvent($postValues);
                 if (!is_null($id)){
                     $textMessage = 'tr_melistoolcalendar_delete_event_success';
@@ -269,10 +283,10 @@ class ToolCalendarController extends AbstractActionController
     /**
      * Retrieving Calendar item event data for updating
      * 
-     * @return \Zend\View\Model\JsonModel
+     * @return \Laminas\View\Model\JsonModel
      */
     public function getEventTitleAction(){
-        $translator = $this->getServiceLocator()->get('translator');
+        $translator = $this->getServiceManager()->get('translator');
         
         $request = $this->getRequest();
         // Default Values
@@ -290,7 +304,7 @@ class ToolCalendarController extends AbstractActionController
              
             if (!empty($postValues)){
                  
-                $calendarTable = $this->getServiceLocator()->get('MelisCalendarTable');
+                $calendarTable = $this->getServiceManager()->get('MelisCalendarTable');
                  
                 $resultEvent = $calendarTable->getEntryById($postValues['cal_id']);
                  

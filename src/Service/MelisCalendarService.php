@@ -9,13 +9,12 @@
 
 namespace MelisCalendar\Service;
 
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use MelisCore\Service\MelisServiceManager;
 
 /**
  * This service handles access to the calendar
  */
-class MelisCalendarService  implements  ServiceLocatorAwareInterface
+class MelisCalendarService extends MelisServiceManager 
 {
 	protected $serviceLocator;
 	
@@ -27,7 +26,7 @@ class MelisCalendarService  implements  ServiceLocatorAwareInterface
 	
 	public function getServiceLocator()
 	{
-		return $this->serviceLocator;
+		return $this->getServiceManager();
 	}	
 	
 	/**

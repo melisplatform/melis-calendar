@@ -9,16 +9,15 @@
 
 namespace MelisCalendar\Form\Factory; 
 
-use Zend\Form\Element\Text;
-use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\ServiceManager\FactoryInterface;
+use Psr\Container\ContainerInterface;
+use Laminas\Form\Element\Text;
 
 /**
  * Melis Calendar Draggble Input Input Element
  */
-class MelisCalendarDraggableInputFactory extends Text implements FactoryInterface
+class MelisCalendarDraggableInputFactory 
 {
-    public function createService(ServiceLocatorInterface $formElementManager)
+    public function __invoke(ContainerInterface $container, $requestedName)
     { 
         $element = new Text;
         // Removing label of the form element

@@ -10,7 +10,7 @@ return array(
                         'method' => 'POST',
                         'action' => '/melis/MelisCalendar/ToolCalendar/addEvent',
                     ),
-                    'hydrator'  => 'Zend\Stdlib\Hydrator\ArraySerializable',
+                    'hydrator'  => 'Laminas\Hydrator\ArraySerializable',
                     'elements' => array(
                         array(
 							'spec' => array(
@@ -40,7 +40,7 @@ return array(
                                         'encoding' => 'UTF-8',
                                         'max'      => 150,
                                         'messages' => array(
-                                            \Zend\Validator\StringLength::TOO_LONG => 'tr_melistoolcalendar_form_event_title_long',
+                                            \Laminas\Validator\StringLength::TOO_LONG => 'tr_melistoolcalendar_form_event_title_long',
                                         ),
                                     ),
                                 ),
@@ -48,7 +48,7 @@ return array(
                                     'name' => 'NotEmpty',
                                     'options' => array(
                                         'messages' => array(
-                                            \Zend\Validator\NotEmpty::IS_EMPTY => 'tr_melistoolcalendar_form_event_title_empty',
+                                            \Laminas\Validator\NotEmpty::IS_EMPTY => 'tr_melistoolcalendar_form_event_title_empty',
                                         ),
                                     ),
                                 ),

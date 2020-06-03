@@ -9,9 +9,9 @@
 
 namespace MelisCalendar\Controller;
 
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\ViewModel;
-use Zend\Session\Container;
+use MelisCore\Controller\AbstractActionController;
+use Laminas\View\Model\ViewModel;
+use Laminas\Session\Container;
 
 class CalendarController extends AbstractActionController
 {
@@ -48,11 +48,11 @@ class CalendarController extends AbstractActionController
     public function renderCalendarToolCreateFormAction(){
         $melisKey = $this->params()->fromRoute('melisKey', '');
         // Get Element form for Calendar event
-        $melisMelisCoreConfig = $this->serviceLocator->get('MelisCoreConfig');
+        $melisMelisCoreConfig = $this->getServiceManager()->get('MelisCoreConfig');
         $appConfigForm = $melisMelisCoreConfig->getFormMergedAndOrdered('meliscalendar/forms/melicalendar_event_form','melicalendar_event_form');
         // Factoring Calendar event and pass to view
-        $factory = new \Zend\Form\Factory();
-        $formElements = $this->getServiceLocator()->get('FormElementManager');
+        $factory = new \Laminas\Form\Factory();
+        $formElements = $this->getServiceManager()->get('FormElementManager');
         $factory->setFormElementManager($formElements);
         $propertyForm = $factory->createForm($appConfigForm);
         
@@ -74,7 +74,7 @@ class CalendarController extends AbstractActionController
 
         if($request->isGet())
         {
-            $calendarData  = $this->getServiceLocator()->get('MelisCalendarService');
+            $calendarData  = $this->getServiceManager()->get('MelisCalendarService');
 
             if(!empty($calendarData)){
                 $data    = "";
@@ -95,7 +95,7 @@ class CalendarController extends AbstractActionController
     
     public function renderCalendarToolRecentAddedAction(){
         $melisKey = $this->params()->fromRoute('melisKey', '');
-        $calendarTable = $this->getServiceLocator()->get('MelisCalendarTable');
+        $calendarTable = $this->getServiceManager()->get('MelisCalendarTable');
         // Retrieving Calendar Event for Recent Added
         $calendarEvent = $calendarTable->getEventRecentAdded();
         // Get Current Language
@@ -114,11 +114,11 @@ class CalendarController extends AbstractActionController
     public function renderCalendarEditEventModalAction(){
         $melisKey = $this->params()->fromRoute('melisKey', '');
         // Get Element form for Calendar event
-        $melisMelisCoreConfig = $this->serviceLocator->get('MelisCoreConfig');
+        $melisMelisCoreConfig = $this->getServiceManager()->get('MelisCoreConfig');
         $appConfigForm = $melisMelisCoreConfig->getFormMergedAndOrdered('meliscalendar/forms/melicalendar_event_form','melicalendar_event_form');
         // Factoring Calendar event and pass to view
-        $factory = new \Zend\Form\Factory();
-        $formElements = $this->serviceLocator->get('FormElementManager');
+        $factory = new \Laminas\Form\Factory();
+        $formElements = $this->getServiceManager()->get('FormElementManager');
         $factory->setFormElementManager($formElements);
         $propertyForm = $factory->createForm($appConfigForm);
         // Set Calendar Event Title input non-draggable input
@@ -129,7 +129,7 @@ class CalendarController extends AbstractActionController
         
         if($calId) {
             
-            $calendarTable = $this->getServiceLocator()->get('MelisCalendarTable');
+            $calendarTable = $this->getServiceManager()->get('MelisCalendarTable');
              
             $resultEvent = $calendarTable->getEntryById($calId);
              

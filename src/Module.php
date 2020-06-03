@@ -9,11 +9,11 @@
 
 namespace MelisCalendar;
 
-use Zend\Mvc\ModuleRouteListener;
-use Zend\Mvc\MvcEvent;
-use Zend\ModuleManager\ModuleManager;
-use Zend\Stdlib\ArrayUtils;
-use Zend\Session\Container;
+use Laminas\Mvc\ModuleRouteListener;
+use Laminas\Mvc\MvcEvent;
+use Laminas\ModuleManager\ModuleManager;
+use Laminas\Stdlib\ArrayUtils;
+use Laminas\Session\Container;
 
 use MelisCalendar\Listener\MelisCalendarFlashMessengerListener;
 
@@ -41,7 +41,7 @@ class Module
             {
                 if ($module[0] == 'melis-backoffice')
                 {
-                    $eventManager->attach(new MelisCalendarFlashMessengerListener());
+                    (new MelisCalendarFlashMessengerListener())->attach($eventManager);
                 }
             }
         }
@@ -72,7 +72,7 @@ class Module
     public function getAutoloaderConfig()
     {
         return array(
-            'Zend\Loader\StandardAutoloader' => array(
+            'Laminas\Loader\StandardAutoloader' => array(
                 'namespaces' => array(
                     __NAMESPACE__ => __DIR__ . '/src/' . __NAMESPACE__,
                 ),
