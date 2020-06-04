@@ -43,8 +43,8 @@ window.initCalendarTool = function() {
 				$this.focus();
 		});
 		
-		// calendar initialization
-		$('#calendar').fullCalendar({
+		// calendar tool initialization
+		$('#calendar-tool').fullCalendar({
 			header: {
 				left: 'prev,next today',
 				center: 'title',
