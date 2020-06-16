@@ -9,13 +9,13 @@
 
 namespace MelisCalendar\Controller;
 
-use MelisCore\Controller\AbstractActionController;
+use MelisCore\Controller\MelisAbstractActionController;
 use Laminas\View\Model\JsonModel;
 
 /**
  * This controller handles the calendar tool
  */
-class ToolCalendarController extends AbstractActionController
+class ToolCalendarController extends MelisAbstractActionController
 {
     /**
      * get calendar table

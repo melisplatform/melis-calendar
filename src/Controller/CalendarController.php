@@ -9,21 +9,21 @@
 
 namespace MelisCalendar\Controller;
 
-use MelisCore\Controller\AbstractActionController;
+use MelisCore\Controller\MelisAbstractActionController;
 use Laminas\View\Model\ViewModel;
 use Laminas\Session\Container;
 
-class CalendarController extends AbstractActionController
+class CalendarController extends MelisAbstractActionController
 {
-	/**
-	 * Render the leftmenu
-	 */
+    /**
+     * Render the leftmenu
+     */
     public function renderCalendarLeftmenuAction()
     {
-    	$melisKey = $this->params()->fromRoute('melisKey', '');
-    	$view = new ViewModel();
-    	$view->melisKey = $melisKey;
-    	return $view;
+        $melisKey = $this->params()->fromRoute('melisKey', '');
+        $view = new ViewModel();
+        $view->melisKey = $melisKey;
+        return $view;
     }
     
     public function renderTestAction() 
@@ -35,8 +35,8 @@ class CalendarController extends AbstractActionController
     }
     
     /*
-     * Render Calendar Tool Page
-     */
+    * Render Calendar Tool Page
+    */
     public function renderCalendarAction()
     {
         $melisKey = $this->params()->fromRoute('melisKey', '');
@@ -56,16 +56,16 @@ class CalendarController extends AbstractActionController
         $factory->setFormElementManager($formElements);
         $propertyForm = $factory->createForm($appConfigForm);
         
-    	$view = new ViewModel();
-    	$view->setVariable('meliscalendar_event_title', $propertyForm);
-    	$view->melisKey = $melisKey;
-    	return $view;
+        $view = new ViewModel();
+        $view->setVariable('meliscalendar_event_title', $propertyForm);
+        $view->melisKey = $melisKey;
+        return $view;
     }
 
     /*
-  * Get all calendar data
-  * return array
-  */
+* Get all calendar data
+* return array
+*/
     public function getAllCalendarData()
     {
         $success     = 0;
@@ -109,8 +109,8 @@ class CalendarController extends AbstractActionController
     }
     
     /*  
-     * Rending Calendar Modal for Updating Calendar Item Event Title
-     * */
+    * Rending Calendar Modal for Updating Calendar Item Event Title
+    * */
     public function renderCalendarEditEventModalAction(){
         $melisKey = $this->params()->fromRoute('melisKey', '');
         // Get Element form for Calendar event
@@ -130,12 +130,12 @@ class CalendarController extends AbstractActionController
         if($calId) {
             
             $calendarTable = $this->getServiceManager()->get('MelisCalendarTable');
-             
+            
             $resultEvent = $calendarTable->getEntryById($calId);
-             
+            
             if (!empty($resultEvent)){
                 $eventData = $resultEvent->current();
-                 
+                
                 if (!empty($eventData)){
                     $propertyForm->bind($eventData);
                 }
@@ -150,8 +150,8 @@ class CalendarController extends AbstractActionController
     }
     
     /*
-     * Rending Calendar Modal Container
-     * */
+    * Rending Calendar Modal Container
+    * */
     public function renderCalendarModalAction(){
     
         $id = $this->params()->fromRoute('id', $this->params()->fromQuery('id', ''));
