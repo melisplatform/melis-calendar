@@ -10,7 +10,7 @@
 namespace MelisCalendar\Controller\DashboardPlugins;
 
 use MelisCore\Controller\DashboardPlugins\MelisCoreDashboardTemplatingPlugin;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 
 class MelisCalendarEventsPlugin extends MelisCoreDashboardTemplatingPlugin
@@ -24,7 +24,7 @@ class MelisCalendarEventsPlugin extends MelisCoreDashboardTemplatingPlugin
     public function calendarEvents()
     {
         /** @var \MelisCore\Service\MelisCoreDashboardPluginsRightsService $dashboardPluginsService */
-        $dashboardPluginsService = $this->getServiceLocator()->get('MelisCoreDashboardPluginsService');
+        $dashboardPluginsService = $this->getServiceManager()->get('MelisCoreDashboardPluginsService');
         //get the class name to make it as a key to the plugin
         $path = explode('\\', __CLASS__);
         $className = array_pop($path);

@@ -83,24 +83,17 @@ return array(
             ),
         ),
     ),
-    'translator' => array(
-        'locale' => 'en_EN',
-    ),
+    'translator' => array(),
     'service_manager' => array(
         'aliases' => array(
-            'translator' => 'MvcTranslator',
-            'MelisCalendarTable' => 'MelisCalendar\Model\Tables\MelisCalendarTable',
-        ),
-        'factories' => array(
-            'MelisCalendarService' => 'MelisCalendar\Service\Factory\MelisCalendarServiceFactory',
-            
-            'MelisCalendar\Model\Tables\MelisCalendarTable' => 'MelisCalendar\Model\Tables\Factory\MelisCalendarTableFactory',
+            'MelisCalendarTable' => \MelisCalendar\Model\Tables\MelisCalendarTable::class,
+            'MelisCalendarService' => \MelisCalendar\Service\MelisCalendarService::class
         ),
     ),
     'controllers' => array(
         'invokables' => array(
-            'MelisCalendar\Controller\Calendar' => 'MelisCalendar\Controller\CalendarController',
-            'MelisCalendar\Controller\ToolCalendar' => 'MelisCalendar\Controller\ToolCalendarController'
+            'MelisCalendar\Controller\Calendar' => \MelisCalendar\Controller\CalendarController::class,
+            'MelisCalendar\Controller\ToolCalendar' => \MelisCalendar\Controller\ToolCalendarController::class
         ),
     ),
     'controller_plugins' => array(
@@ -110,12 +103,10 @@ return array(
     ),
     'form_elements' => array(
         'factories' => array(
-            'MelisCalendarDraggableInput' => 'MelisCalendar\Form\Factory\MelisCalendarDraggableInputFactory',
+            'MelisCalendarDraggableInput' => \MelisCalendar\Form\Factory\MelisCalendarDraggableInputFactory::class,
         )
     ),
     'view_manager' => array(
-        'display_not_found_reason' => true,
-        'display_exceptions'       => true,
         'doctype'                  => 'HTML5',
         'template_map' => array(
             'layout/layout' => __DIR__ . '/../view/layout/default.phtml',

@@ -9,27 +9,13 @@
 
 namespace MelisCalendar\Service;
 
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use MelisCore\Service\MelisServiceManager;
 
 /**
  * This service handles access to the calendar
  */
-class MelisCalendarService  implements  ServiceLocatorAwareInterface
+class MelisCalendarService extends MelisServiceManager 
 {
-	protected $serviceLocator;
-	
-	public function setServiceLocator(ServiceLocatorInterface $sl)
-	{
-		$this->serviceLocator = $sl;
-		return $this;
-	}
-	
-	public function getServiceLocator()
-	{
-		return $this->serviceLocator;
-	}	
-	
 	/**
 	 * Adding and Updating Calendar Event
 	 * 
@@ -46,58 +32,58 @@ class MelisCalendarService  implements  ServiceLocatorAwareInterface
 	 * @return Array
 	 */
 	public function addCalendarEvent($postValues){
-	    
-	    $responseData = array();
-	    
-	    $calendarTable = $this->getServiceLocator()->get('MelisCalendarTable');
-	    $melisCoreAuth = $this->getServiceLocator()->get('MelisCoreAuth');
-	    
-	    $userAuthDatas =  $melisCoreAuth->getStorage()->read();
-	    $userId = (int) $userAuthDatas->usr_id;
-	     
-	    if (!isset($postValues['cal_id']))
-	    {
-	         
-	        $postValues['cal_date_end'] = $postValues['cal_date_start'];
-	        $postValues['cal_date_last_update'] = $postValues['cal_date_start'];
-	        $postValues['cal_date_added'] = date('Y-m-d H:i:s');
-	        $postValues['cal_last_update_by'] = $userId;
-	        $postValues['cal_created_by'] = $userId;
-	        
-	        $eventId = $calendarTable->save($postValues);
-	        
-	        $responseData = array(
-	            'id' => $eventId,
-	            'title' => $postValues['cal_event_title'],
-	            'start' => $postValues['cal_date_start'],
-	            'end' => $postValues['cal_date_end'],
-	        );
-	         
-	    }
-	    else
-	    {
-	        $resultEvent = $calendarTable->getEntryById($postValues['cal_id']);
-	         
-	        if (!empty($resultEvent)){
-	             
-	            $event = $resultEvent->current();
-	             
-	            if (!empty($event)){
-	                
-        	        $postValues['cal_last_update_by'] = $userId;
-        	        $postValues['cal_date_last_update'] = date('Y-m-d H:i:s');
-        	         
-        	        $calendarTable->save($postValues,$postValues['cal_id']);
-        	         
-        	        $responseData = array(
-        	            'id' => $postValues['cal_id'],
-        	            'title' => $postValues['cal_event_title'],
-                    );
-	            }
-	        }
-	    }
-	    
-	    return $responseData;
+		
+		$responseData = array();
+		
+		$calendarTable = $this->getServiceManager()->get('MelisCalendarTable');
+		$melisCoreAuth = $this->getServiceManager()->get('MelisCoreAuth');
+		
+		$userAuthDatas =  $melisCoreAuth->getStorage()->read();
+		$userId = (int) $userAuthDatas->usr_id;
+		
+		if (!isset($postValues['cal_id']))
+		{
+			
+			$postValues['cal_date_end'] = $postValues['cal_date_start'];
+			$postValues['cal_date_last_update'] = $postValues['cal_date_start'];
+			$postValues['cal_date_added'] = date('Y-m-d H:i:s');
+			$postValues['cal_last_update_by'] = $userId;
+			$postValues['cal_created_by'] = $userId;
+			
+			$eventId = $calendarTable->save($postValues);
+			
+			$responseData = array(
+				'id' => $eventId,
+				'title' => $postValues['cal_event_title'],
+				'start' => $postValues['cal_date_start'],
+				'end' => $postValues['cal_date_end'],
+			);
+			
+		}
+		else
+		{
+			$resultEvent = $calendarTable->getEntryById($postValues['cal_id']);
+			
+			if (!empty($resultEvent)){
+				
+				$event = $resultEvent->current();
+				
+				if (!empty($event)){
+					
+					$postValues['cal_last_update_by'] = $userId;
+					$postValues['cal_date_last_update'] = date('Y-m-d H:i:s');
+					
+					$calendarTable->save($postValues,$postValues['cal_id']);
+					
+					$responseData = array(
+						'id' => $postValues['cal_id'],
+						'title' => $postValues['cal_event_title'],
+					);
+				}
+			}
+		}
+		
+		return $responseData;
 	}
 	
 	/**
@@ -108,32 +94,32 @@ class MelisCalendarService  implements  ServiceLocatorAwareInterface
 	 */
 	public function reschedCalendarEvent($postValues)
 	{
-	    $responseData = array();
-	    
-	    $calendarTable = $this->getServiceLocator()->get('MelisCalendarTable');
-	    
-	    $melisCoreAuth = $this->getServiceLocator()->get('MelisCoreAuth');
-	    $userAuthDatas =  $melisCoreAuth->getStorage()->read();
-	    $userId = (int) $userAuthDatas->usr_id;
-	    
-	    $resultEvent = $calendarTable->getEntryById($postValues['cal_id']);
-	     
-	    if (!empty($resultEvent)){
-	         
-	        $event = $resultEvent->current();
-	         
-	        if (!empty($event)){
-	            if ($postValues['cal_date_end']==''){
-	                $postValues['cal_date_end'] = $postValues['cal_date_start'];
-	            }
-	            $postValues['cal_last_update_by'] = $userId;
-	            $postValues['cal_date_last_update'] = date('Y-m-d H:i:s');
-	            $calendarTable->save($postValues,$postValues['cal_id']);
-	            $responseData['success'] = 1;
-	        }
-	    }
-	    
-	    return $responseData;
+		$responseData = array();
+		
+		$calendarTable = $this->getServiceManager()->get('MelisCalendarTable');
+		
+		$melisCoreAuth = $this->getServiceManager()->get('MelisCoreAuth');
+		$userAuthDatas =  $melisCoreAuth->getStorage()->read();
+		$userId = (int) $userAuthDatas->usr_id;
+		
+		$resultEvent = $calendarTable->getEntryById($postValues['cal_id']);
+		
+		if (!empty($resultEvent)){
+			
+			$event = $resultEvent->current();
+			
+			if (!empty($event)){
+				if ($postValues['cal_date_end']==''){
+					$postValues['cal_date_end'] = $postValues['cal_date_start'];
+				}
+				$postValues['cal_last_update_by'] = $userId;
+				$postValues['cal_date_last_update'] = date('Y-m-d H:i:s');
+				$calendarTable->save($postValues,$postValues['cal_id']);
+				$responseData['success'] = 1;
+			}
+		}
+		
+		return $responseData;
 	}
 	
 	/**
@@ -145,19 +131,19 @@ class MelisCalendarService  implements  ServiceLocatorAwareInterface
 	 */
 	public function deleteCalendarEvent($postValues)
 	{
-	    $calId = null;
-	    $calendarTable = $this->getServiceLocator()->get('MelisCalendarTable');
-	    $resultEvent = $calendarTable->getEntryById($postValues['cal_id']);
-	     
-	    if (!empty($resultEvent)){
-	         
-	        $event = $resultEvent->current();
-	         
-	        if (!empty($event)){
-	            $calId = $calendarTable->deleteById($postValues['cal_id']);
-	        }
-	    }
-	    
-	    return $calId;
+		$calId = null;
+		$calendarTable = $this->getServiceManager()->get('MelisCalendarTable');
+		$resultEvent = $calendarTable->getEntryById($postValues['cal_id']);
+		
+		if (!empty($resultEvent)){
+			
+			$event = $resultEvent->current();
+			
+			if (!empty($event)){
+				$calId = $calendarTable->deleteById($postValues['cal_id']);
+			}
+		}
+		
+		return $calId;
 	}
 }

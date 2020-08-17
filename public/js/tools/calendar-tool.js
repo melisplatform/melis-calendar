@@ -43,8 +43,8 @@ window.initCalendarTool = function() {
 				$this.focus();
 		});
 		
-		// calendar initialization
-		$('#calendar').fullCalendar({
+		// calendar tool initialization
+		$('#calendar-tool').fullCalendar({
 			header: {
 				left: 'prev,next today',
 				center: 'title',
@@ -130,7 +130,7 @@ window.initCalendarTool = function() {
 								
 								// render the event on the calendar
 								// the last `true` argument determines if the event "sticks" (http://arshaw.com/fullcalendar/docs/event_rendering/renderEvent/)
-								$('#calendar').fullCalendar('renderEvent', copiedEventObject, true);
+								$('#calendar-tool').fullCalendar('renderEvent', copiedEventObject, true);
 								
 								// init input as empty
 								$('#newCalendarEventInt').val('');
@@ -245,7 +245,7 @@ var calendarTool = {
 		    }).done(function(data) {
 		    	if(data.success) {
 		    		// updating calendar after deleting event
-		    		$('#calendar').fullCalendar('removeEvents',eventId);
+		    		$('#calendar-tool').fullCalendar('removeEvents',eventId);
 		    		// Notifications
 					melisHelper.melisOkNotification(data.textTitle, data.textMessage);
 					melisCore.flashMessenger();
@@ -301,12 +301,12 @@ var calendarTool = {
 			}).done(function(data) {
 				if(data.success) {
 					// Retrieving Calendar event id
-					var eventData = $("#calendar").fullCalendar('clientEvents', calVal_eventId)[0];
+					var eventData = $("#calendar-tool").fullCalendar('clientEvents', calVal_eventId)[0];
 					// Generating event title
 					var newTitleEvent = calVal_eventId +" : "+eventTitle;
 					// Updating calendar event using FullCalendar method
 					eventData.title = newTitleEvent;
-					$('#calendar').fullCalendar('updateEvent', eventData);
+					$('#calendar-tool').fullCalendar('updateEvent', eventData);
 					
 					//close generated modal after saving event title
 					$('#'+calVal_id+'_container').modal('hide');
@@ -326,7 +326,7 @@ var calendarTool = {
 	// This is trigger when updating Calendar Event
 	gotoFCdate: function(){
 		if ( fcal_year_client_event!=null&&fcal_month_client_event!=null ) {
-			$('#calendar').fullCalendar( 'gotoDate', fcal_year_client_event, fcal_month_client_event);
+			$('#calendar-tool').fullCalendar( 'gotoDate', fcal_year_client_event, fcal_month_client_event);
 			// ReInitialize to default value after Executed this function
 			fcal_year_client_event = null;
 			fcal_month_client_event = null;
