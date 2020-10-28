@@ -67,21 +67,21 @@ class ToolCalendarController extends MelisAbstractActionController
         $textMessage = '';
         $errors  = array();
         $textTitle = '';
-         
+        
         $responseData = array();
-         
+        
         $melisMelisCoreConfig = $this->getServiceManager()->get('MelisCoreConfig');
-         
+        
         $appConfigForm = $melisMelisCoreConfig->getFormMergedAndOrdered('meliscalendar/forms/melicalendar_event_form','melicalendar_event_form');
-         
+        
         $factory = new \Laminas\Form\Factory();
         $formElements = $this->getServiceManager()->get('FormElementManager');
         $factory->setFormElementManager($formElements);
         $propertyForm = $factory->createForm($appConfigForm);
         $melisTool = $this->getServiceManager()->get('MelisCoreTool');
         if($request->isPost()) {
-             
-            $postValues = get_object_vars($request->getPost());
+            
+            $postValues = $request->getPost()->toArray();
             $postValues = $melisTool->sanitizePost($postValues);
             $propertyForm->setData($postValues);
             
@@ -94,7 +94,7 @@ class ToolCalendarController extends MelisAbstractActionController
             {
                 $logTypeCode = 'CALENDAR_EVENT_UPDATE';
             }
-             
+            
             if($propertyForm->isValid()) {
                 $calendarService = $this->getServiceManager()->get('MelisCalendarService');
                 $responseData = $calendarService->addCalendarEvent($postValues);
@@ -107,9 +107,9 @@ class ToolCalendarController extends MelisAbstractActionController
                 $errors = $propertyForm->getMessages();
                 $textMessage = 'tr_melistoolcalendar_form_event_error_msg';
             }
-             
+            
             $appConfigForm = $appConfigForm['elements'];
-             
+            
             foreach ($errors as $keyError => $valueError)
             {
                 foreach ($appConfigForm as $keyForm => $valueForm)
@@ -120,7 +120,7 @@ class ToolCalendarController extends MelisAbstractActionController
                 }
             }
         }
-         
+        
         $response = array(
             'success' => $status,
             'textTitle' => 'tr_melistoolcalendar_save_event_title',
@@ -134,7 +134,7 @@ class ToolCalendarController extends MelisAbstractActionController
         {
             $calId = $responseData['id'];
         }
-         
+        
         if ($status){
             $this->getEventManager()->trigger('meliscalendar_save_event_end', $this, array_merge($response, array('typeCode' => $logTypeCode, 'itemId' => $calId)));
         }
@@ -154,7 +154,7 @@ class ToolCalendarController extends MelisAbstractActionController
 
         if($request->isPost()) {
 
-            $postValues = get_object_vars($request->getPost());
+            $postValues = $request->getPost()->toArray();
 
             if (!empty($postValues)){
 
@@ -188,24 +188,24 @@ class ToolCalendarController extends MelisAbstractActionController
         $errors  = array();
         $textMessage = '';
         $textTitle = '';
-         
+        
         if($request->isPost()) {
-             
-            $postValues = get_object_vars($request->getPost());
-             
+            
+            $postValues = $request->getPost()->toArray();
+            
             if (!empty($postValues)){
-                 
+                
                 $calendarTable = $this->getServiceManager()->get('MelisCalendarTable');
-                 
+                
                 $id = $postValues['cal_id'];
                 $resultEvent = $calendarTable->getEntryById($id);
-                 
+                
                 if (!empty($resultEvent)){
-                     
+                    
                     $event = $resultEvent->current();
-                     
+                    
                     if (!empty($event)){
-                         
+                        
                         $calendarService = $this->getServiceManager()->get('MelisCalendarService');
                         $responseData = $calendarService->reschedCalendarEvent($postValues);
                         
@@ -217,7 +217,7 @@ class ToolCalendarController extends MelisAbstractActionController
                 }
             }
         }
-         
+        
         $response = array(
             'success' => $status,
             'textTitle' => 'tr_melistoolcalendar_save_event_title',
@@ -228,7 +228,7 @@ class ToolCalendarController extends MelisAbstractActionController
         if ($status){
             $this->getEventManager()->trigger('meliscalendar_save_event_end', $this, array_merge($response, array('typeCode' => 'CALENDAR_EVENT_DRAG', 'itemId' => $id)));
         }
-         
+        
         return new JsonModel($response);
     }
     
@@ -248,13 +248,13 @@ class ToolCalendarController extends MelisAbstractActionController
         $errors  = array();
         $textMessage = '';
         $textTitle = '';
-         
+        
         if($request->isPost()) {
-             
-            $postValues = get_object_vars($request->getPost());
-             
+            
+            $postValues = $request->getPost()->toArray();
+            
             if (!empty($postValues)){
-                 
+                
                 $calendarService = $this->getServiceManager()->get('MelisCalendarService');
                 $id = $responseData = $calendarService->deleteCalendarEvent($postValues);
                 if (!is_null($id)){
@@ -265,7 +265,7 @@ class ToolCalendarController extends MelisAbstractActionController
                 }
             }
         }
-         
+        
         $response = array(
             'success' => $status,
             'textTitle' => 'tr_melistoolcalendar_delete_event_title',
@@ -276,7 +276,7 @@ class ToolCalendarController extends MelisAbstractActionController
         if ($status){
             $this->getEventManager()->trigger('meliscalendar_save_event_end', $this, array_merge($response, array('typeCode' => 'CALENDAR_EVENT_DELETE', 'itemId' => $id)));
         }
-         
+        
         return new JsonModel($response);
     }
     
@@ -297,20 +297,20 @@ class ToolCalendarController extends MelisAbstractActionController
         $textTitle = '';
         $eventData = array();
         
-         
+        
         if($request->isPost()) {
-             
-            $postValues = get_object_vars($request->getPost());
-             
+            
+            $postValues = $request->getPost()->toArray();
+            
             if (!empty($postValues)){
-                 
+                
                 $calendarTable = $this->getServiceManager()->get('MelisCalendarTable');
-                 
+                
                 $resultEvent = $calendarTable->getEntryById($postValues['cal_id']);
-                 
+                
                 if (!empty($resultEvent)){
                     $eventData = $resultEvent->current();
-                     
+                    
                     if (!empty($eventData)){
                         $textMessage = $translator->translate('tr_melistoolcalendar_get_event_success');
                         $status  = 1;
@@ -318,7 +318,7 @@ class ToolCalendarController extends MelisAbstractActionController
                 }
             }
         }
-         
+        
         $response = array(
             'success' => $status,
             'textTitle' => $translator->translate('tr_melistoolcalendar_form_title'),
@@ -326,7 +326,7 @@ class ToolCalendarController extends MelisAbstractActionController
             'errors' => $errors,
             'eventData' => $eventData
         );
-         
+        
         return new JsonModel($response);
     }
 
