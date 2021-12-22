@@ -130,8 +130,8 @@ window.initCalendarTool = function() {
 								
 								// render the event on the calendar
 								// the last `true` argument determines if the event "sticks" (http://arshaw.com/fullcalendar/docs/event_rendering/renderEvent/)
-								$('#calendar-tool').fullCalendar('renderEvent', copiedEventObject, true);
-								
+								$('#calendar-tool').fullCalendar('renderEvent', copiedEventObject, false);
+
 								// init input as empty
 								$('#newCalendarEventInt').val('');
 								
