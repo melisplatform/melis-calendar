@@ -10,7 +10,7 @@ return array(
                         'method' => 'POST',
                         'action' => '/melis/MelisCalendar/ToolCalendar/addEvent',
                     ),
-                    'hydrator'  => 'Laminas\Hydrator\ArraySerializable',
+                    'hydrator'  => 'Laminas\Hydrator\ArraySerializableHydrator',
                     'elements' => array(
                         array(
 							'spec' => array(
