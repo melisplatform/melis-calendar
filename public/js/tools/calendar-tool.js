@@ -40,7 +40,7 @@ window.initCalendarTool = function() {
 		// mobile FIX to open put text in the box
 		$('.melis-draggable-input').on('click', function() {
 			var $this = $(this);
-				$this.focus();
+				$this.trigger("focus");
 		});
 		
 		// calendar tool initialization
