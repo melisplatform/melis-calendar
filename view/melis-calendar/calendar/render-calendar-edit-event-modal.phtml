@@ -14,7 +14,7 @@
 			<div class="widget widget-tabs widget-tabs-double widget-tabs-responsive margin-none border-none">
                 <div class="widget-head">
                 	<ul class="nav nav-tabs">
-                		<li class="active"><a href="#<?php echo $this->zoneconfig['conf']['id'] ?>" class="glyphicons <?php echo ($this->calId) ? 'pencil' : 'plus' ?>" data-toggle="tab" aria-expanded="true"><i></i> <?php echo $this->translate('tr_melistoolcalendar_tool_calendar') ?></a></li>
+                		<li class="active"><a href="#<?php echo $this->zoneconfig['conf']['id'] ?>" class="glyphicons <?php echo ($this->calId) ? 'pencil' : 'plus' ?>" data-bs-toggle="tab" aria-expanded="true"><i></i> <?php echo $this->translate('tr_melistoolcalendar_tool_calendar') ?></a></li>
             		</ul>
         		</div>
         		<div class="widget-body innerAll inner-2x">
@@ -31,7 +31,7 @@
                                     	echo $this->form()->closeTag(); 
                                     ?>
                                  	<div align="right">
-                                 		<a data-dismiss="modal" class="btn btn-danger float-left"><i class="fa fa-times"></i> <?php echo $this->translate('tr_melistoolcalendar_update_close_button')?></a>
+                                 		<a data-bs-dismiss="modal" class="btn btn-danger float-left"><i class="fa fa-times"></i> <?php echo $this->translate('tr_melistoolcalendar_update_close_button')?></a>
                                  		<a class="btn btn-success btnSaveEventTitle"><i class="fa fa-save"></i>  <?php echo $this->translate('tr_melistoolcalendar_update_save_button'); ?></a>
                                  	</div>
                             	</div>

@@ -98,7 +98,8 @@ window.initCalendarTool = function() {
 					// get date data from param
 					dataString.push({
 						name: "cal_date_start",
-						value: $.fullCalendar.formatDate(date, "yyyy-MM-dd")
+						//value: $.fullCalendar.formatDate(date, "yyyy-MM-dd")
+						value: moment(date, 'DD.MM.YYYY').format('yyyy-MM-dd')
 					});
 					
 					dataString = $.param(dataString);
