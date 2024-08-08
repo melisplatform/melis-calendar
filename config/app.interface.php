@@ -33,15 +33,19 @@ return array(
             ),
             'ressources' => array(
                 'js' => array(
-                    //'/MelisCalendar/plugins/fullcalendar.min.js', // v1.6.4
-                    //'/MelisCalendar/plugins/fullcalendar/fullcalendar.min.js', // v3.0.0
-                    '/MelisCalendar/plugins/fullcalendar-2-0/js/fullcalendar.js', // v2.0.0
+                    // v6.1.14
+                    '/MelisCalendar/plugins/fullcalendar/dist/index.global.min.js',
+                    '/MelisCalendar/plugins/fullcalendar/packages/bootstrap5/index.global.min.js',
+                    
+                    // v2.0.0
+                    //'/MelisCalendar/plugins/fullcalendar-2-0/js/fullcalendar.js', 
                     '/MelisCalendar/js/tools/calendar-tool.js',
                 ),
                 'css' => array(
-                    //'/MelisCalendar/plugins/fullcalendar.css', // v1.6.4
-                    //'/MelisCalendar/plugins/fullcalendar/fullcalendar.css', // v3.0.0
-                    '/MelisCalendar/plugins/fullcalendar-2-0/css/fullcalendar.css', // v2.0.0
+                    // v3.0.0
+                    //'/MelisCalendar/plugins/fullcalendar/fullcalendar.css',
+                    // v2.0.0
+                    //'/MelisCalendar/plugins/fullcalendar-2-0/css/fullcalendar.css',
                     '/MelisCalendar/css/calendar.css'
                 ),
                 /**
