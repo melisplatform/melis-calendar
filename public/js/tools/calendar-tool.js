@@ -73,9 +73,9 @@ window.initCalendarTool = function() {
 						today:    translations.tr_melistoolcalendar_fullcalendar_today,
 						month:    'month',
 						week:     'week',
-						day:      'day'
+						day:      'day',
+						list: 	  'list'
 					},
-					//
 					titleFormat: { 
 						month: 'long', year: 'numeric'
 					},
@@ -137,7 +137,8 @@ window.initCalendarTool = function() {
 										// render/add the event on the calendar
 										// the last 'true' argument determines if the event "sticks" (https://fullcalendar.io/docs/Calendar-addEvent)
 										//calendar.addEvent(copiedEventObject, true);
-										$("#calendar-tool").fullCalendar("renderEvent", copiedEventObject, true);
+										//$("#calendar-tool").fullCalendar("renderEvent", copiedEventObject, true);
+										$("#calendar-tool").FullCalendar("addEvent", copiedEventObject, true);
 
 										// init input as empty
 										$("#newCalendarEventInt").val("");
@@ -159,12 +160,26 @@ window.initCalendarTool = function() {
 							});
 					},
 					eventDidMount: function(arg) {
+						/* console.log(`arg: `, arg);
+						console.log(`arg.event: `, arg.event); */
 						// Render calendar item event, update and Delete icon render to each calendar event
-						$(arg.el).append( "<span class='event-icon'><i class='fa fa-pencil-square-o update-event' data-id='"+arg.event._id+"'></i><i class='fa fa-trash-o delete-event' data-id='"+arg.event._id+"'></i></span>" );
+						$(arg.el).append("<span class='event-icon'><i class='fa fa-pencil-square-o update-event' data-id='"+arg.event.id+"'></i><i class='fa fa-trash-o delete-event' data-id='"+arg.event.id+"'></i></span>");
 					},
-					/* eventContent: function(args) {
-						console.log(`eventContent args.event.title: `, args.event.title);
-					}, */
+					eventRemove: function(removeInfo) {
+						console.log(`eventRemove removeInfo: `, removeInfo);
+					},
+					eventClick: function(eventClickInfo) {
+						console.log(`eventClick eventClickInfo: `, eventClickInfo);
+						var el = eventClickInfo.el,
+							event = eventClickInfo.event;
+
+							$(el).find(".event-icon .delete-event").on("click", function() {
+								console.log(`eventClick .delete-event: calendarTool.deleteEvent(eventId) clicked!!!`);
+								var eventId = $(this).data("id");
+									// pop up modal if .event-icon, z-index: 9999
+									calendarTool.deleteEvent( eventId );
+							});
+					},
 					eventResize: function(event){
 						// calendar event that trigger when event resized
 						calendarTool.reschedEvent(event);
@@ -188,6 +203,9 @@ window.initCalendarTool = function() {
 						if ( !isLoading ) {
 							var langLocale = getLocale();
 								calendar.setOption('locale', langLocale);
+
+								/* console.log(`langLocale: `, langLocale);
+								console.log(`calendar.getOption('locale'): `, calendar.getOption('locale')); */
 								
 							var dayTitleTimeout = setTimeout(function() {
 								var $dayTitle 	= $(".fc-col-header-cell-cushion");
@@ -275,34 +293,37 @@ var calendarTool = {
 	deleteEvent: function(eventId) {
 		// deletion confirmation
 		melisCoreTool.confirm(
-		translations.tr_melistoolcalendar_delete_event_btn_yes,
-		translations.tr_melistoolcalendar_delete_event_btn_no,
-		translations.tr_melistoolcalendar_delete_event_title, 
-		translations.tr_melistoolcalendar_delete_event_confirm, 
-		function() {
-			$.ajax({
-		        type        : 'POST', 
-		        url         :  '/melis/MelisCalendar/ToolCalendar/deleteEvent',
-		        data		: {cal_id: eventId},
-		        dataType    : 'json',
-		        encode		: true,
-		    }).done(function(data) {
-		    	if(data.success) {
-		    		// updating calendar after deleting event
-		    		$('#calendar-tool').fullCalendar('removeEvents',eventId);
-		    		// Notifications
-					melisHelper.melisOkNotification(data.textTitle, data.textMessage);
-					melisCore.flashMessenger();
-					
-					// Reload Recent Added Widget
-					melisHelper.zoneReload('id_melistoolcalendar_tool_recent_added','melistoolcalendar_tool_recent_added');
-		    	}else{
-		    		melisCoreTool.alertDanger("#siteaddalert", '', data.textMessage);
-					melisHelper.melisKoNotification(data.textTitle, data.textMessage, data.errors);
-		    	}
-			}).fail(function(){
-				alert( translations.tr_meliscore_error_message );
-			});
+			translations.tr_melistoolcalendar_delete_event_btn_yes,
+			translations.tr_melistoolcalendar_delete_event_btn_no,
+			translations.tr_melistoolcalendar_delete_event_title, 
+			translations.tr_melistoolcalendar_delete_event_confirm, 
+			function() {
+				$.ajax({
+					type        : 'POST', 
+					url         :  '/melis/MelisCalendar/ToolCalendar/deleteEvent',
+					data		: {cal_id: eventId},
+					dataType    : 'json',
+					encode		: true,
+				}).done(function(data) {
+					console.log(`deleteEvent data: `, data);
+					if ( data.success ) {
+						// updating calendar after deleting event
+						$('#calendar-tool').FullCalendar('removeEvents',eventId);
+
+						// Notifications
+						melisHelper.melisOkNotification(data.textTitle, data.textMessage);
+						melisCore.flashMessenger();
+						
+						// Reload Recent Added Widget
+						melisHelper.zoneReload('id_melistoolcalendar_tool_recent_added','melistoolcalendar_tool_recent_added');
+					}
+					else {
+						melisCoreTool.alertDanger("#siteaddalert", '', data.textMessage);
+						melisHelper.melisKoNotification(data.textTitle, data.textMessage, data.errors);
+					}
+				}).fail(function(){
+					alert( translations.tr_meliscore_error_message );
+				});
 		});
 	},
 	// editing calendar event
@@ -445,13 +466,15 @@ $(function() {
 		// init
 		initDashboardCalendar();
 
-		// bidning tool action
-		$body.on("click", ".delete-event", function(e) { 
+		// binding tool action
+		/* $body.on("click", ".delete-event", function(e) { 
 			var $this = $(this);
 
 				// deleting event using event item delete button
 				calendarTool.deleteEvent( $this.data('id') );
-		});
+
+				console.log(`.delete-event clicked!!`);
+		}); */
 
 		$body.on("click", ".update-event", function(e) { 
 			var $this = $(this);
