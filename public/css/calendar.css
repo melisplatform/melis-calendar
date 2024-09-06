@@ -1,4 +1,4 @@
-.event-icon{
+.event-icon {
     float: right;
     color: #dadada;
     position: absolute;
@@ -7,7 +7,7 @@
     background: #932e2a;
     border-radius: inherit;
 }
-.event-icon i{
+.event-icon i {
     padding: 3px 3px;
     margin-top: 2px;
     margin-right: 2px;
@@ -571,4 +571,41 @@ background-color: #0044cc;
 .fc-col-header-cell-cushion,
 .fc-toolbar-title {
     text-transform: capitalize;
+}
+.bi.bi-chevron-left::before,
+.bi.bi-chevron-right::before {
+    color: #fff !important;
+}
+.event-icon {
+    top: 2px;
+    right: 2px;
+    z-index: 99;
+}
+.event-icon .delete-event,
+.event-icon .update-event {
+    cursor: pointer;
+}
+.event-icon .update-event:focus,
+.event-icon .update-event:hover,
+.event-icon .delete-event:focus,
+.event-icon .delete-event:hover {
+	color: #fff;
+	background-color: #932e2a;
+}
+.fc-event {
+    border-radius: 0;
+}
+.dashbaorad-calendar-tool .datepicker .table-condensed tr td.active {
+    background-color: #ffdc2826 !important;
+    color: #686868;
+}
+.dashbaorad-calendar-tool .datepicker table tr td.day {
+    color: #686868;
+}
+.dashbaorad-calendar-tool .datepicker table tr td.day.calendar-highlight {
+    color: #fff;
+    background-color: #e64444;
+}
+.dashbaorad-calendar-tool .datepicker table tr td.active.day.calendar-highlight.calendar-event {
+    background-color: #e61c23 !important;
 }
