@@ -2,10 +2,11 @@
     float: right;
     color: #dadada;
     position: absolute;
-    right: 0;
-    top: 0;
+    right: 2px;
+    top: 2px;
     background: #932e2a;
     border-radius: inherit;
+    z-index: 99;
 }
 .event-icon i {
     padding: 3px 3px;
