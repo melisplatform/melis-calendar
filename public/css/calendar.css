@@ -578,8 +578,8 @@ background-color: #0044cc;
     color: #fff !important;
 }
 .event-icon {
-    top: 2px;
-    right: 2px;
+    top: 2px !important;
+    right: 2px !important;
     z-index: 99;
 }
 .event-icon .delete-event,

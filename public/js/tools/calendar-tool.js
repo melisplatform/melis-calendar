@@ -202,15 +202,26 @@ window.initCalendarTool = function() {
 
 			var $body = $("body");
 
+				// get current locale
 				function getLocale() {
 					var $langCode = $("#id_meliscore_header_language .dropdown-menu li a span.active");
 						return $langCode.attr("data-lang");
 				}
 
+				// render calendar on activeTabId = id_meliscalendar_tool
+				function renderCalendar() {
+					if ( activeTabId === 'id_meliscalendar_tool' ) {
+						calendar.render();
+					}
+				}
+
 				// init
 				initDashboardCalendar();
 
-				// on clicking of the #id_meliscalendar_tool
+				// useful specially when switching active tab to id_meliscalendar_tool
+				// renderCalendar();
+
+				// on clicking of the #id_meliscalendar_tool tab
 				$body.on("shown.bs.tab", "a[href='#id_meliscalendar_tool']", function() {
 					calendar.render();
 				});			
