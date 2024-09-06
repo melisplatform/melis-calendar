@@ -57,8 +57,8 @@ window.initCalendarTool = function() {
 						nowIndicator: true,
 						headerToolbar: {
 							left: 'prev,next today',
-							center: 'title',
-							right: 'dayGridMonth,timeGridWeek,timeGridDay' //listWeek
+							center: 'title'
+							//right: 'dayGridMonth,timeGridWeek,timeGridDay', 'listWeek'
 						},
 						buttonText :{
 							today:    translations.tr_melistoolcalendar_fullcalendar_today,
