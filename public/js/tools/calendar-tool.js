@@ -221,10 +221,11 @@ window.initCalendarTool = function() {
 				// useful specially when switching active tab to id_meliscalendar_tool
 				// renderCalendar();
 
-				// on clicking of the #id_meliscalendar_tool tab
-				$body.on("shown.bs.tab", "a[href='#id_meliscalendar_tool']", function() {
+				// on clicking a[href='#id_meliscalendar_tool'], #id_meliscalendar_tool tab
+				$body.on("shown.bs.tab", "#id_meliscalendar_tool", function() {
+					console.log(`#id_meliscalendar_tool shown.bs.tab`);
 					calendar.render();
-				});			
+				});
 
 				// binding tool action
 				$body.on("click", ".delete-event", function() { 
