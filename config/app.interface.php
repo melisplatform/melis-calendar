@@ -36,16 +36,11 @@ return array(
                     // v6.1.14
                     '/MelisCalendar/plugins/fullcalendar/dist/index.global.min.js',
                     '/MelisCalendar/plugins/fullcalendar/packages/bootstrap5/index.global.min.js',
-                    
-                    // v2.0.0
-                    //'/MelisCalendar/plugins/fullcalendar-2-0/js/fullcalendar.js', 
+
                     '/MelisCalendar/js/tools/calendar-tool.js',
                 ),
                 'css' => array(
-                    // v3.0.0
-                    //'/MelisCalendar/plugins/fullcalendar/fullcalendar.css',
-                    // v2.0.0
-                    //'/MelisCalendar/plugins/fullcalendar-2-0/css/fullcalendar.css',
+                    //'/MelisCalendar/plugins/bootstrap-icons/font/bootstrap-icons.min.css',
                     '/MelisCalendar/css/calendar.css'
                 ),
                 /**
@@ -66,9 +61,22 @@ return array(
                     ]
                 ]
             ),
-            'datas' => array(
+            'datas' => [
+                /**
+                 * Used to copy necessary file to
+                 * main public/bundles-generated folder
+                 */
+                'bundle_all_needed_files' => [
+                    //will be put inside css folder
+                    'css' => [
+                        '/plugins/bootstrap-icons/font/fonts'
+                    ],
+                    //will be put inside js folder
+                    'js' => [
 
-            ),
+                    ]
+                ]
+            ],
             'interface' => array(
                 'melistoolcalendar_cof' => array(
                     'conf' => array(
