@@ -223,7 +223,6 @@ window.initCalendarTool = function() {
 
 				// on clicking a[href='#id_meliscalendar_tool'], #id_meliscalendar_tool tab
 				$body.on("shown.bs.tab", "#id_meliscalendar_tool", function() {
-					console.log(`#id_meliscalendar_tool shown.bs.tab`);
 					calendar.render();
 				});
 
