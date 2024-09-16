@@ -149,7 +149,7 @@ window.initCalendarTool = function() {
 						eventDidMount: function(eventDidMountInfo) {
 							var element = eventDidMountInfo.el,
 								eventId = eventDidMountInfo.event.id,
-								$parent = $(element).parent();
+								$parent = $(element); //.parent()
 
 								// Render calendar item event, update and Delete icon render to each calendar event
 								$parent.prepend("<span class='event-icon'><i class='fa fa-pencil-square-o update-event' data-id='"+eventId+"'></i><i class='fa fa-trash-o delete-event' data-id='"+eventId+"'></i></span>");

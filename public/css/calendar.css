@@ -579,7 +579,7 @@ background-color: #0044cc;
 }
 .event-icon {
     top: 2px !important;
-    right: 2px !important;
+    right: 4px !important;
     z-index: 99;
 }
 .event-icon .delete-event,
