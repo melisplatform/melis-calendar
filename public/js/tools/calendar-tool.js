@@ -20,244 +20,201 @@ var fc_ready = false;
 
 // Calendar Tool Init
 window.initCalendarTool = function() {
+	console.log(`jscallback initCalendarTool()`);
 	responsiveCalendar();
 	var calVal_eventId 	= null,
 		calVal_id 		= null,
 		calVal_melisKey = null,
 		flag_requesting = false;
 
-		$(function() {
-			var draggableEl = document.getElementById("idformcalendar");
+		var draggableEl = document.getElementById("idformcalendar");
 
-			var draggable = new FullCalendar.Draggable(draggableEl, {
-				itemSelector: '.melis-draggable-input',
-				eventData: function(eventEl) {
-					let eventTitle = $(eventEl).closest(".input-group").find("#newCalendarEventInt").val();
-					return {
-						title: eventTitle,
-						create: false
-					};
-				}
-			});
-
-			// mobile FIX to open put text in the box, 
-			$('.melis-draggable-input').on('click', function() {
-				var $this = $(this);
-					$this.trigger("focus");
-			});
-
-			var calendarEl 			= document.getElementById('calendar-tool'),
-				initialLocaleCode 	= 'en';
-			
-				if ( $(calendarEl).length ) {
-					// calendar tool initialization
-					var calendar = new FullCalendar.Calendar(calendarEl, {
-						themeSystem: 'bootstrap5',
-						initialView: 'dayGridMonth',
-						nowIndicator: true,
-						headerToolbar: {
-							left: 'prev,next today',
-							center: 'title'
-							//right: 'dayGridMonth,timeGridWeek,timeGridDay', 'listWeek'
-						},
-						buttonText :{
-							today:    translations.tr_melistoolcalendar_fullcalendar_today,
-							month:    'month',
-							week:     'week',
-							day:      'day'
-							//list: 	  'list'
-						},
-						titleFormat: { 
-							month: 'long', year: 'numeric'
-						},
-						//timeZone: 'local',
-						// https://codepen.io/pen?&editors=001,locale option implemenation
-						locale: initialLocaleCode,
-						editable: true,
-						droppable: true,
-						dayMaxEvents: true,
-						// getting event for calendar from server
-						events: '/melis/MelisCalendar/ToolCalendar/retrieveCalendarEvents',
-						drop: function(dropInfo) {
-							var dataString = new Array();
-
-								//get data from input
-								dataString.push({
-									name: "cal_event_title",
-									value: $("#newCalendarEventInt").val()
-								});
-
-								// get data from param
-								dataString.push({
-									name: "cal_date_start",
-									value: moment(dropInfo.date).format('YYYY-MM-DD')
-								});
-
-								dataString = $.param(dataString);
-
-								// posting to server as new calendar event
-								$.ajax({
-									type: 'POST',
-									url: '/melis/MelisCalendar/ToolCalendar/saveEvent',
-									data: dataString,
-									dataType: 'json',
-									encode: true
-								}).done(function(data) {
-									if ( data.success ) {
-										if ( data.event !== null ) {
-											// get event data from ajax/http request response
-											var event = data.event;
-
-											// init event Object by using data response
-											var eventObject = {
-												id: event.id,
-												title: event.id + ' : ' + event.title, // concat id and title as calendar item event title
-												start: event.start,
-												end: event.end,
-												allDay: true
-											};
-
-											// retrieve the dropped element's stored Event Object
-											//var originalEventObject = eventObject;
-											
-											// we need to copy it, so that multiple events don't have a reference to the same object
-											//var copiedEventObject = $.extend({}, originalEventObject);
-										
-											// event on the calendar
-											//calendar.addEvent(copiedEventObject);
-											calendar.addEvent(eventObject);
-
-											// init input as empty
-											$("#newCalendarEventInt").val("");
-
-											// reload recent added widget
-											melisHelper.zoneReload("id_melistoolcalendar_tool_recent_added", "melistoolcalendar_tool_recent_added");
-
-											// notifications
-											melisHelper.melisOkNotification(data.textTitle, data.textMessage);
-											melisCore.flashMessenger();
-										}
-									}
-									else {
-										melisCoreTool.alertDanger("#siteaddalert", "", data.textMessage);
-										melisHelper.melisKoNotification(data.textTitle, data.textMessage, data.errors);
-									}
-								}).fail(function() {
-									alert( translations.tr_meliscore_error_message );
-								});
-						},
-						eventDidMount: function(eventDidMountInfo) {
-							var element = eventDidMountInfo.el,
-								eventId = eventDidMountInfo.event.id,
-								$parent = $(element); //.parent()
-
-								// Render calendar item event, update and Delete icon render to each calendar event
-								$parent.prepend("<span class='event-icon'><i class='fa fa-pencil-square-o update-event' data-id='"+eventId+"'></i><i class='fa fa-trash-o delete-event' data-id='"+eventId+"'></i></span>");
-						},
-						eventResize: function(eventResizeInfo) {
-							// calendar event that trigger when event resized
-							calendarTool.reschedEvent(eventResizeInfo.event);
-						},
-						eventDrop: function (eventDropInfo) {
-							// calendar event that trigger where event drag and drop to another date
-							calendarTool.reschedEvent(eventDropInfo.event);
-						},
-						datesSet: function(event) {
-							// Go to specific date
-							// This is trigger when updating Calendar Event
-							calendarTool.gotoFCdate(calendar);
-							// Re init fc_ready to ready/ready to maniplulate
-							fc_ready = true;
-						},
-						loading: function( isLoading ) { 
-							// Re init fc_ready to ready/ready to maniplulate
-							fc_ready = true;
-
-							// if you want to add a loading animation
-							if ( !isLoading ) {
-								var langLocale = getLocale();
-									calendar.setOption('locale', langLocale);
-								
-								var dayTitleTimeout = setTimeout(function() {
-									var $dayTitle 	= $(".fc-col-header-cell-cushion");
-										if ( $dayTitle.length ) {
-											$dayTitle.each(function(i, v) {
-												var $this = $(v);
-													text = $this.text().trim();
-													if ( text.length > 3 ) {
-														var newText = text.replace(/\./g, '');
-															$this.text( newText );
-													}
-											});
-
-											clearTimeout( dayTitleTimeout );
-										}
-								}, 1000);
-							}					
-						}
-					});
-
-					calendar.render();
-				}
-
-			var $body = $("body");
-
-				// get current locale
-				function getLocale() {
-					var $langCode = $("#id_meliscore_header_language .dropdown-menu li a span.active");
-						return $langCode.attr("data-lang");
-				}
-
-				// render calendar on activeTabId = id_meliscalendar_tool
-				function renderCalendar() {
-					if ( activeTabId === 'id_meliscalendar_tool' ) {
-						calendar.render();
-					}
-				}
-
-				// init
-				initDashboardCalendar();
-
-				// useful specially when switching active tab to id_meliscalendar_tool
-				// renderCalendar();
-
-				// on clicking a[href='#id_meliscalendar_tool'], #id_meliscalendar_tool tab
-				$body.on("shown.bs.tab", "#id_meliscalendar_tool", function() {
-					calendar.render();
-				});
-
-				// binding tool action
-				$body.on("click", ".delete-event", function() { 
-					var $this = $(this);
-
-						// deleting event using event item delete button, calendar instance and event id
-						calendarTool.deleteEvent( calendar, $this.data('id') );
-				});
-
-				$body.on("click", ".update-event", function() { 
-					var $this = $(this);
-
-						// editing event title
-						// this action will appear the modal for updating event title
-						calendarTool.editEventTitle( $this.data('id') );
-				});
-
-				$body.on("click", ".btnSaveEventTitle", function() {
-					var $this = $(this);
-
-						// saving event title from modal
-						calendarTool.saveEventTitle( calendar, $this.data('id') );
-				});
-
-				$body.on("keyup keypress", "#idformcalendar", function(e) {
-					var key = e.key || e.which;
-
-						if (key === 'Enter') { 
-							e.preventDefault();
-							return false;
-						}
-				});
+		var draggable = new FullCalendar.Draggable(draggableEl, {
+			itemSelector: '.melis-draggable-input',
+			eventData: function(eventEl) {
+				let eventTitle = $(eventEl).closest(".input-group").find("#newCalendarEventInt").val();
+				return {
+					title: eventTitle,
+					create: false
+				};
+			}
 		});
+
+		// mobile FIX to open put text in the box, 
+		$('.melis-draggable-input').on('click', function() {
+			var $this = $(this);
+				$this.trigger("focus");
+		});
+
+		var calendarEl 			= document.getElementById('calendar-tool'),
+			initialLocaleCode 	= 'en';
+		
+			if ( $(calendarEl).length ) {
+				// calendar tool initialization
+				var calendar = new FullCalendar.Calendar(calendarEl, {
+					themeSystem: 'bootstrap5',
+					initialView: 'dayGridMonth',
+					nowIndicator: true,
+					headerToolbar: {
+						left: 'prev,next today',
+						center: 'title'
+						//right: 'dayGridMonth,timeGridWeek,timeGridDay', 'listWeek'
+					},
+					buttonText :{
+						today:    translations.tr_melistoolcalendar_fullcalendar_today,
+						month:    'month',
+						week:     'week',
+						day:      'day'
+						//list: 	  'list'
+					},
+					titleFormat: { 
+						month: 'long', year: 'numeric'
+					},
+					//timeZone: 'local',
+					// https://codepen.io/pen?&editors=001,locale option implemenation
+					locale: initialLocaleCode,
+					editable: true,
+					droppable: true,
+					dayMaxEvents: true,
+					// getting event for calendar from server
+					events: '/melis/MelisCalendar/ToolCalendar/retrieveCalendarEvents',
+					drop: function(dropInfo) {
+						var dataString = new Array();
+
+							//get data from input
+							dataString.push({
+								name: "cal_event_title",
+								value: $("#newCalendarEventInt").val()
+							});
+
+							// get data from param
+							dataString.push({
+								name: "cal_date_start",
+								value: moment(dropInfo.date).format('YYYY-MM-DD')
+							});
+
+							dataString = $.param(dataString);
+
+							// posting to server as new calendar event
+							$.ajax({
+								type: 'POST',
+								url: '/melis/MelisCalendar/ToolCalendar/saveEvent',
+								data: dataString,
+								dataType: 'json',
+								encode: true
+							}).done(function(data) {
+								if ( data.success ) {
+									if ( data.event !== null ) {
+										// get event data from ajax/http request response
+										var event = data.event;
+
+										// init event Object by using data response
+										var eventObject = {
+											id: event.id,
+											title: event.id + ' : ' + event.title, // concat id and title as calendar item event title
+											start: event.start,
+											end: event.end,
+											allDay: true
+										};
+
+										// retrieve the dropped element's stored Event Object
+										//var originalEventObject = eventObject;
+										
+										// we need to copy it, so that multiple events don't have a reference to the same object
+										//var copiedEventObject = $.extend({}, originalEventObject);
+									
+										// event on the calendar
+										//calendar.addEvent(copiedEventObject);
+										calendar.addEvent(eventObject);
+
+										// init input as empty
+										$("#newCalendarEventInt").val("");
+
+										// reload recent added widget
+										melisHelper.zoneReload("id_melistoolcalendar_tool_recent_added", "melistoolcalendar_tool_recent_added");
+
+										// notifications
+										melisHelper.melisOkNotification(data.textTitle, data.textMessage);
+										melisCore.flashMessenger();
+									}
+								}
+								else {
+									melisCoreTool.alertDanger("#siteaddalert", "", data.textMessage);
+									melisHelper.melisKoNotification(data.textTitle, data.textMessage, data.errors);
+								}
+							}).fail(function() {
+								alert( translations.tr_meliscore_error_message );
+							});
+					},
+					eventDidMount: function(eventDidMountInfo) {
+						var element = eventDidMountInfo.el,
+							eventId = eventDidMountInfo.event.id,
+							$parent = $(element); //.parent()
+
+							// Render calendar item event, update and Delete icon render to each calendar event
+							$parent.prepend("<span class='event-icon'><i class='fa fa-pencil-square-o update-event' data-id='"+eventId+"'></i><i class='fa fa-trash-o delete-event' data-id='"+eventId+"'></i></span>");
+					},
+					eventResize: function(eventResizeInfo) {
+						// calendar event that trigger when event resized
+						calendarTool.reschedEvent(eventResizeInfo.event);
+					},
+					eventDrop: function (eventDropInfo) {
+						// calendar event that trigger where event drag and drop to another date
+						calendarTool.reschedEvent(eventDropInfo.event);
+					},
+					datesSet: function(event) {
+						// Go to specific date
+						// This is trigger when updating Calendar Event
+						calendarTool.gotoFCdate(calendar);
+						// Re init fc_ready to ready/ready to maniplulate
+						fc_ready = true;
+					},
+					loading: function( isLoading ) { 
+						// Re init fc_ready to ready/ready to maniplulate
+						fc_ready = true;
+
+						// if you want to add a loading animation
+						if ( !isLoading ) {
+							var langLocale = getLocale();
+								calendar.setOption('locale', langLocale);
+							
+							var dayTitleTimeout = setTimeout(function() {
+								var $dayTitle 	= $(".fc-col-header-cell-cushion");
+									if ( $dayTitle.length ) {
+										$dayTitle.each(function(i, v) {
+											var $this = $(v);
+												text = $this.text().trim();
+												if ( text.length > 3 ) {
+													var newText = text.replace(/\./g, '');
+														$this.text( newText );
+												}
+										});
+
+										clearTimeout( dayTitleTimeout );
+									}
+							}, 1000);
+						}					
+					}
+				});
+
+				calendar.render();
+			}
+
+			// get current locale
+			function getLocale() {
+				var $langCode = $("#id_meliscore_header_language .dropdown-menu li a span.active");
+					return $langCode.attr("data-lang");
+			}
+
+			// render calendar on activeTabId = id_meliscalendar_tool
+			function renderCalendar() {
+				if ( activeTabId === 'id_meliscalendar_tool' ) {
+					calendar.render();
+				}
+			}
+
+			// useful specially when switching active tab to id_meliscalendar_tool
+			// renderCalendar();
 }
 
 // Local varial Year and Month
@@ -496,6 +453,50 @@ var calendarTool = {
 			});
 	}
 }
+
+$(function() {
+	var $body = $("body");
+
+		// init
+		initDashboardCalendar();
+
+		// on clicking a[href='#id_meliscalendar_tool'], #id_meliscalendar_tool tab
+		$body.on("shown.bs.tab", "#id_meliscalendar_tool", function() {
+			calendar.render();
+		});
+
+		// binding tool action
+		$body.on("click", ".delete-event", function() { 
+			var $this = $(this);
+
+				// deleting event using event item delete button, calendar instance and event id
+				calendarTool.deleteEvent( calendar, $this.data('id') );
+		});
+
+		$body.on("click", ".update-event", function() { 
+			var $this = $(this);
+
+				// editing event title
+				// this action will appear the modal for updating event title
+				calendarTool.editEventTitle( $this.data('id') );
+		});
+
+		$body.on("click", ".btnSaveEventTitle", function() {
+			var $this = $(this);
+
+				// saving event title from modal
+				calendarTool.saveEventTitle( calendar, $this.data('id') );
+		});
+
+		$body.on("keyup keypress", "#idformcalendar", function(e) {
+			var key = e.key || e.which;
+
+				if (key === 'Enter') { 
+					e.preventDefault();
+					return false;
+				}
+		});
+});
 
 // Responsive During Resize
 $(window).on('resize',function(){

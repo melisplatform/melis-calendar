@@ -573,9 +573,13 @@ background-color: #0044cc;
 .fc-toolbar-title {
     text-transform: capitalize;
 }
-.bi.bi-chevron-left::before,
-.bi.bi-chevron-right::before {
+#calendar-tool .bi.bi-chevron-left::before,
+#calendar-tool .bi.bi-chevron-right::before {
     color: #fff !important;
+}
+.tempus-dominus-widget .previous:hover .bi,
+.tempus-dominus-widget .next:hover .bi {
+    background-color: #e9ecef;
 }
 .event-icon {
     top: 2px !important;
