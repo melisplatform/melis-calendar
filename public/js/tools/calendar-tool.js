@@ -20,7 +20,7 @@ var fc_ready = false;
 
 // Calendar Tool Init
 window.initCalendarTool = function() {
-	console.log(`jscallback initCalendarTool()`);
+	// console.log(`jscallback initCalendarTool()`);
 	responsiveCalendar();
 	var calVal_eventId 	= null,
 		calVal_id 		= null,
