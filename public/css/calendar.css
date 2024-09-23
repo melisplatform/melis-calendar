@@ -575,7 +575,7 @@ background-color: #0044cc;
 }
 #calendar-tool .bi.bi-chevron-left::before,
 #calendar-tool .bi.bi-chevron-right::before {
-    color: #fff !important;
+    color: #fff;
 }
 .tempus-dominus-widget .previous:hover .bi,
 .tempus-dominus-widget .next:hover .bi {
