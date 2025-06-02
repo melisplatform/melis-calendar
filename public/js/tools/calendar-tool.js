@@ -196,7 +196,22 @@ window.initCalendarTool = function() {
 									}
 							}, 1000);
 						}					
-					}
+					},
+                    eventDragStart: function(info) {
+                        $('.fc-daygrid-day, .fc-timegrid-slot').on('mouseenter.highlightDrop', function () {
+                            // Remove highlight from all cells first
+                            $('.fc-daygrid-day, .fc-timegrid-slot').removeClass('fc-highlight-drop');
+                            // Add highlight only to the currently hovered cell
+                            $(this).addClass('fc-highlight-drop');
+                        });
+                    },
+
+                    eventDragStop: function(info) {
+                        // Clean up all classes and event listeners
+                        $('.fc-daygrid-day, .fc-timegrid-slot')
+                            .off('mouseenter.highlightDrop')
+                            .removeClass('fc-highlight-drop');
+                    }
 				});
 
 				calendar.render();
@@ -278,7 +293,7 @@ var calendarTool = {
 		// set variable from param
 		var id 			= event.id,
 	  		start 		= moment(event.start).format('YYYY-MM-DD'),
-	  		end 		= moment(event.end).format('YYYY-MM-DD'),
+	  		end 		= ((event.end) ? moment(event.end).format('YYYY-MM-DD') : ""),
 	  		// prepairing dataString to post to server
 			dataString 	= new Array();
 		  

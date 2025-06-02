@@ -614,3 +614,7 @@ background-color: #0044cc;
 .dashbaorad-calendar-tool .datepicker table tr td.active.day.calendar-highlight.calendar-event {
     background-color: #e61c23 !important;
 }
+
+.fc-highlight-drop {
+    background-color: var(--fc-today-bg-color); /* Bootstrap 5+ uses CSS vars */
+}
