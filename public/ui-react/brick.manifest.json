@@ -1,0 +1,8 @@
+{
+  "id": "calendar",
+  "route": "/calendar",
+  "label": "Calendrier",
+  "forwardKey": "MelisCalendar/Calendar",
+  "melisKey": "meliscalendar_tool",
+  "entry": "brick.js"
+}
