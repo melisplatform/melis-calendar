@@ -4,5 +4,6 @@
   "label": "Calendrier",
   "forwardKey": "MelisCalendar/Calendar",
   "melisKey": "meliscalendar_tool",
-  "entry": "brick.js"
+  "entry": "brick.js",
+  "persistent": true
 }
