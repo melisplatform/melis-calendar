@@ -35,6 +35,7 @@ const DICT: Record<Lang, Record<string, string>> = {
     kpi_total: 'Total', kpi_upcoming: 'À venir',
     edit_title: 'Modifier l’événement', new_title: 'Nouvel événement', f_title: 'Titre', f_start: 'Début', f_end: 'Fin',
     save: 'Enregistrer', cancel: 'Annuler', del: 'Supprimer', saved: 'Enregistré ✓', err_title: 'Le titre est obligatoire.',
+    del_title: 'Confirmer la suppression', del_msg: 'Supprimer l’événement « {name} » ? Cette action est irréversible.',
     no_access: 'Vous n’avez pas les droits pour consulter le calendrier.',
   },
   en: {
@@ -44,6 +45,7 @@ const DICT: Record<Lang, Record<string, string>> = {
     kpi_total: 'Total', kpi_upcoming: 'Upcoming',
     edit_title: 'Edit event', new_title: 'New event', f_title: 'Title', f_start: 'Start', f_end: 'End',
     save: 'Save', cancel: 'Cancel', del: 'Delete', saved: 'Saved ✓', err_title: 'Title is required.',
+    del_title: 'Confirm deletion', del_msg: 'Delete event "{name}"? This cannot be undone.',
     no_access: 'You do not have permission to view the calendar.',
   },
 }
@@ -359,8 +361,8 @@ function EventModal({ event, onClose, onSaved }: { event: CalEvent | null; onClo
         <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8, padding: '12px 16px', borderTop: '1px solid var(--color-border)' }}>
           <div>
             {isEdit && can('edit') && (
-              <button style={{ ...btnGhost, borderColor: '#fca5a5', color: '#dc2626' }} onClick={() => (confirmDel ? doDelete() : setConfirmDel(true))} disabled={saving}>
-                {confirmDel ? t('del') + ' ?' : t('del')}
+              <button style={{ ...btnGhost, borderColor: '#fca5a5', color: '#dc2626' }} onClick={() => setConfirmDel(true)} disabled={saving}>
+                {t('del')}
               </button>
             )}
           </div>
@@ -370,6 +372,24 @@ function EventModal({ event, onClose, onSaved }: { event: CalEvent | null; onClo
           </div>
         </div>
       </div>
+
+      {confirmDel && event && (
+        <div style={{ position: 'fixed', inset: 0, zIndex: 70, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,.5)' }}
+          onClick={(e) => { if (e.target === e.currentTarget) setConfirmDel(false) }}>
+          <div style={{ ...card, width: '100%', maxWidth: 380, padding: 20 }}>
+            <h3 style={{ fontSize: 16, fontWeight: 600, margin: 0 }}>{t('del_title')}</h3>
+            <p style={{ marginTop: 8, marginBottom: 0, fontSize: 14, color: 'var(--color-muted-foreground,#6b7280)' }}>
+              {t('del_msg', { name: event.title })}
+            </p>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8, marginTop: 18 }}>
+              <button style={btnGhost} onClick={() => setConfirmDel(false)} disabled={saving}>{t('cancel')}</button>
+              <button style={{ ...btnGhost, borderColor: '#fca5a5', color: '#dc2626' }} onClick={doDelete} disabled={saving}>
+                {saving ? '…' : t('del')}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
