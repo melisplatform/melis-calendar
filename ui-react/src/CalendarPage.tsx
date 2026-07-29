@@ -118,6 +118,17 @@ export default function CalendarPage() {
   const [mode, setMode] = useState<'react' | 'iframe'>('react')
   const [frameLoaded, setFrameLoaded] = useState(false)
 
+  // Responsive : on mesure le CONTENEUR (pas la fenêtre) — la brique vit dans un panneau du shell.
+  const rootRef = useRef<HTMLDivElement>(null)
+  const [narrow, setNarrow] = useState(false)
+  useEffect(() => {
+    const el = rootRef.current
+    if (!el || typeof ResizeObserver === 'undefined') return
+    const ro = new ResizeObserver((entries) => setNarrow(entries[0].contentRect.width < 760))
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [])
+
   const weeks = useMemo(() => monthGrid(year, month0), [year, month0])
   const rangeFrom = weeks[0][0]
   const rangeTo = weeks[5][6]
@@ -167,14 +178,14 @@ export default function CalendarPage() {
   }, [])
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 16, padding: 24, height: '100%', boxSizing: 'border-box', overflow: 'hidden' }}>
+    <div ref={rootRef} style={{ display: 'flex', flexDirection: 'column', gap: 16, padding: narrow ? 12 : 24, height: '100%', boxSizing: 'border-box', overflowX: 'hidden', overflowY: narrow ? 'auto' : 'hidden' }}>
       {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, flexShrink: 0 }}>
-        <div>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexShrink: 0, flexWrap: 'wrap' }}>
+        <div style={{ minWidth: 0 }}>
           <h1 style={{ fontSize: 20, fontWeight: 700, margin: 0 }}>{t('title')}</h1>
           <p style={{ fontSize: 14, color: 'var(--color-muted-foreground)', margin: '2px 0 0' }}>{t('subtitle')}</p>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
           <ViewToggle mode={mode} onChange={(m) => { setMode(m); if (m === 'iframe') setFrameLoaded(true) }} />
           <button style={btnGhost} onClick={reload} title="↻">↻</button>
           {can('create') && <button style={btnPrimary} onClick={() => setEditing('new')}>+ {t('new_event')}</button>}
@@ -194,9 +205,9 @@ export default function CalendarPage() {
       {(!can('create') && !can('edit')) ? (
         <div style={{ ...card, padding: '40px 16px', textAlign: 'center', fontSize: 14, color: 'var(--color-muted-foreground)' }}>{t('no_access')}</div>
       ) : (
-      <div style={{ display: mode === 'react' ? 'grid' : 'none', gridTemplateColumns: 'minmax(240px, 300px) minmax(0, 1fr)', gap: 16, flex: 1, minHeight: 0 }}>
-        {/* Panneau gauche */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 14, minHeight: 0 }}>
+      <div style={{ display: mode === 'react' ? 'grid' : 'none', gridTemplateColumns: narrow ? 'minmax(0, 1fr)' : 'minmax(240px, 300px) minmax(0, 1fr)', gap: 16, flex: narrow ? 'none' : 1, minHeight: 0 }}>
+        {/* Panneau gauche — passe SOUS le calendrier en vue étroite */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 14, minHeight: 0, order: narrow ? 2 : 0 }}>
           <div style={{ display: 'flex', gap: 8 }}>
             <Kpi label={t('kpi_total')} value={stats?.total ?? null} />
             <Kpi label={t('kpi_upcoming')} value={stats?.upcoming ?? null} />
@@ -234,13 +245,13 @@ export default function CalendarPage() {
         </div>
 
         {/* Calendrier */}
-        <div style={{ ...card, display: 'flex', flexDirection: 'column', minHeight: 0, overflow: 'hidden' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '12px 14px', borderBottom: '1px solid var(--color-border)' }}>
+        <div style={{ ...card, display: 'flex', flexDirection: 'column', minHeight: narrow ? 420 : 0, overflow: 'hidden', order: narrow ? 1 : 0 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: narrow ? '10px' : '12px 14px', borderBottom: '1px solid var(--color-border)', flexWrap: 'wrap' }}>
             <button style={{ ...btnGhost, width: 34, height: 34, padding: 0, justifyContent: 'center' }} onClick={() => gotoMonth(-1)}>‹</button>
             <button style={{ ...btnGhost, width: 34, height: 34, padding: 0, justifyContent: 'center' }} onClick={() => gotoMonth(1)}>›</button>
             <button style={{ ...btnGhost, height: 34 }} onClick={gotoToday}>{t('today')}</button>
-            <div style={{ flex: 1, textAlign: 'center', fontSize: 16, fontWeight: 700, textTransform: 'capitalize' }}>{monthLabel}</div>
-            <div style={{ width: 120 }} />
+            <div style={{ flex: 1, minWidth: 0, textAlign: 'center', fontSize: narrow ? 14 : 16, fontWeight: 700, textTransform: 'capitalize' }}>{monthLabel}</div>
+            {!narrow && <div style={{ width: 120 }} />}
           </div>
 
           {/* En-têtes jours */}
@@ -251,7 +262,7 @@ export default function CalendarPage() {
           </div>
 
           {/* Grille */}
-          <div style={{ flex: 1, display: 'grid', gridTemplateRows: 'repeat(6, 1fr)', minHeight: 0 }}>
+          <div style={{ flex: 1, display: 'grid', gridTemplateRows: narrow ? 'repeat(6, minmax(52px, auto))' : 'repeat(6, 1fr)', minHeight: 0 }}>
             {weeks.map((week, wi) => (
               <div key={wi} style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)' }}>
                 {week.map((dayIso) => {
