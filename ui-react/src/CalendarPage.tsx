@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, type CSSProperties, type DragEvent } from 'react'
+import { useEffect, useMemo, useRef, useState, type CSSProperties, type DragEvent, type PointerEvent as ReactPointerEvent } from 'react'
 import { fetchEvents, fetchCalStats, saveEvent, deleteEvent, type CalEvent, type CalStats } from './calendar-api'
 import { ViewToggle } from './ViewToggle'
 
@@ -31,6 +31,7 @@ const DICT: Record<Lang, Record<string, string>> = {
   fr: {
     title: 'Calendrier', subtitle: 'Glissez un événement sur un jour, ou déplacez-le pour le rééchelonner',
     new_event: 'Nouvel événement', new_event_ph: 'Titre de l’événement…', drag_hint: 'Glissez ce bloc sur un jour du calendrier',
+    tap_hint: 'Touchez un jour du calendrier pour placer « {name} » (touchez à nouveau le bloc pour annuler)',
     today: 'Aujourd’hui', month_events: 'Événements du mois', no_events: 'Aucun événement ce mois',
     kpi_total: 'Total', kpi_upcoming: 'À venir',
     edit_title: 'Modifier l’événement', new_title: 'Nouvel événement', f_title: 'Titre', f_start: 'Début', f_end: 'Fin',
@@ -41,6 +42,7 @@ const DICT: Record<Lang, Record<string, string>> = {
   en: {
     title: 'Calendar', subtitle: 'Drag an event onto a day, or move it to reschedule',
     new_event: 'New event', new_event_ph: 'Event title…', drag_hint: 'Drag this block onto a calendar day',
+    tap_hint: 'Tap a calendar day to place "{name}" (tap the block again to cancel)',
     today: 'Today', month_events: 'This month’s events', no_events: 'No event this month',
     kpi_total: 'Total', kpi_upcoming: 'Upcoming',
     edit_title: 'Edit event', new_title: 'New event', f_title: 'Title', f_start: 'Start', f_end: 'End',
@@ -92,6 +94,11 @@ const eventChip = (moving: boolean): CSSProperties => ({
   color: 'var(--color-primary)', fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', opacity: moving ? 0.4 : 1,
 })
 
+// Charge utile d'un glisser : soit un nouvel event (bloc de gauche), soit un event existant (rééchelonnement).
+type DragPayload =
+  | { kind: 'new'; title: string }
+  | { kind: 'move'; id: number; title: string; start: string; end: string }
+
 function Kpi({ label: lbl, value }: { label: string; value: number | null }) {
   return (
     <div style={{ ...card, display: 'flex', flexDirection: 'column', gap: 2, padding: 14, flex: 1, minWidth: 110 }}>
@@ -114,6 +121,8 @@ export default function CalendarPage() {
   const [newTitle, setNewTitle] = useState('')
   const [dragId, setDragId] = useState<number | null>(null)
   const [overDay, setOverDay] = useState<string | null>(null)
+  const [armed, setArmed] = useState<DragPayload | null>(null)          // tactile : bloc « armé » par un tap, à poser sur un jour
+  const [ghost, setGhost] = useState<{ x: number; y: number; label: string } | null>(null)
   const [editing, setEditing] = useState<CalEvent | 'new' | null>(null)
   const [mode, setMode] = useState<'react' | 'iframe'>('react')
   const [frameLoaded, setFrameLoaded] = useState(false)
@@ -151,23 +160,106 @@ export default function CalendarPage() {
   }
   function gotoToday() { const d = new Date(); setYear(d.getFullYear()); setMonth0(d.getMonth()) }
 
-  // ── Drag-drop natif ──
-  function onDropDay(e: DragEvent, dayIso: string) {
-    e.preventDefault(); setOverDay(null); setDragId(null)
-    let payload: { kind: string; title?: string; id?: number; start?: string; end?: string } | null = null
-    try { payload = JSON.parse(e.dataTransfer.getData('application/json') || e.dataTransfer.getData('text/plain')) } catch { /* */ }
-    if (!payload) return
+  // ── Dépôt sur un jour (commun au drag natif souris ET au drag tactile) ──
+  function applyDrop(payload: DragPayload, dayIso: string) {
     if (payload.kind === 'new') {
-      const title = (payload.title || '').trim()
+      const title = payload.title.trim()
       if (!title || !can('create')) return
       saveEvent({ title, start: dayIso, end: dayIso }).then(() => { setNewTitle(''); reload(); notify('ok', t('title'), t('saved')) }).catch((err) => notify('ko', t('title'), err.message))
     } else if (payload.kind === 'move' && payload.id) {
       if (!can('edit')) return
-      const duration = Math.max(0, diffDays(payload.end!, payload.start!))
       if (payload.start === dayIso) return // pas de changement
-      saveEvent({ id: payload.id, title: payload.title || '', start: dayIso, end: addDays(dayIso, duration) })
+      const duration = Math.max(0, diffDays(payload.end, payload.start))
+      saveEvent({ id: payload.id, title: payload.title, start: dayIso, end: addDays(dayIso, duration) })
         .then(() => { reload(); notify('ok', t('title'), t('saved')) }).catch((err) => notify('ko', t('title'), err.message))
     }
+  }
+
+  // ── Drag-drop natif (souris / desktop) ──
+  function onDropDay(e: DragEvent, dayIso: string) {
+    e.preventDefault(); setOverDay(null); setDragId(null)
+    let payload: DragPayload | null = null
+    try { payload = JSON.parse(e.dataTransfer.getData('application/json') || e.dataTransfer.getData('text/plain')) } catch { /* */ }
+    if (payload) applyDrop(payload, dayIso)
+  }
+
+  /* ── Drag TACTILE (Pointer Events) ───────────────────────────────────────
+   * Le drag-drop HTML5 natif ne se déclenche JAMAIS au doigt (aucun dragstart
+   * sur touch) → sur mobile la poignée est inerte. On double donc le mécanisme :
+   * pointerType 'mouse' → on laisse faire le natif (zéro régression desktop) ;
+   * sinon on suit le doigt nous-mêmes (fantôme + hit-test sur [data-day]).
+   * Un simple tap (sans déplacement) « arme » le bloc : le jour tapé ensuite
+   * reçoit l'event — indispensable en vue étroite, où le bloc est SOUS la grille.
+   * ──────────────────────────────────────────────────────────────────────── */
+  const touchDrag = useRef<{ payload: DragPayload; x0: number; y0: number; moved: boolean; tappable: boolean } | null>(null)
+  const overDayRef = useRef<string | null>(null)
+  const justDragged = useRef(false)          // un drag tactile se termine par un click « fantôme » : on l'ignore
+  const autoScrollDy = useRef(0)
+  const autoScrollTimer = useRef<number | null>(null)
+
+  function stopAutoScroll() {
+    if (autoScrollTimer.current !== null) { window.clearInterval(autoScrollTimer.current); autoScrollTimer.current = null }
+    autoScrollDy.current = 0
+  }
+  // Le conteneur racine scrolle en vue étroite : on le fait défiler quand le doigt approche d'un bord.
+  function autoScroll(clientY: number) {
+    const el = rootRef.current
+    if (!el) return
+    const r = el.getBoundingClientRect()
+    const EDGE = 72
+    autoScrollDy.current = clientY < r.top + EDGE ? -14 : clientY > r.bottom - EDGE ? 14 : 0
+    if (autoScrollDy.current === 0) { stopAutoScroll(); return }
+    if (autoScrollTimer.current === null) {
+      autoScrollTimer.current = window.setInterval(() => {
+        const node = rootRef.current
+        if (node) node.scrollTop += autoScrollDy.current
+      }, 16)
+    }
+  }
+  useEffect(() => stopAutoScroll, [])
+
+  function onDragPointerDown(e: ReactPointerEvent, payload: DragPayload, tappable: boolean) {
+    if (e.pointerType === 'mouse') return                 // desktop : drag natif
+    justDragged.current = false
+    touchDrag.current = { payload, x0: e.clientX, y0: e.clientY, moved: false, tappable }
+    try { (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId) } catch { /* */ }
+  }
+  function onDragPointerMove(e: ReactPointerEvent) {
+    const d = touchDrag.current
+    if (!d) return
+    if (!d.moved && Math.hypot(e.clientX - d.x0, e.clientY - d.y0) < 8) return
+    if (!d.moved) { d.moved = true; setArmed(null); if (d.payload.kind === 'move') setDragId(d.payload.id) }
+    setGhost({ x: e.clientX, y: e.clientY, label: d.payload.title.trim() || t('new_event') })
+    const cell = (document.elementFromPoint(e.clientX, e.clientY) as HTMLElement | null)?.closest('[data-day]')
+    const day = cell?.getAttribute('data-day') ?? null
+    overDayRef.current = day
+    setOverDay(day)
+    autoScroll(e.clientY)
+  }
+  function onDragPointerUp() {
+    const d = touchDrag.current
+    touchDrag.current = null
+    stopAutoScroll(); setGhost(null); setDragId(null)
+    if (!d) return
+    if (d.moved) {
+      justDragged.current = true
+      const day = overDayRef.current
+      overDayRef.current = null; setOverDay(null)
+      if (day) applyDrop(d.payload, day)
+    } else if (d.tappable) {
+      setArmed((a) => (a ? null : d.payload))            // tap = arme / désarme
+    }
+  }
+  function onDragPointerCancel() {
+    touchDrag.current = null
+    stopAutoScroll(); setGhost(null); setDragId(null)
+    overDayRef.current = null; setOverDay(null)
+  }
+  // Un jour tapé alors qu'un bloc est armé reçoit l'event.
+  function onDayTap(dayIso: string) {
+    if (!armed) return
+    applyDrop(armed, dayIso)
+    setArmed(null)
   }
 
   const monthLabel = new Intl.DateTimeFormat(bcp(), { month: 'long', year: 'numeric' }).format(new Date(year, month0, 1))
@@ -220,13 +312,22 @@ export default function CalendarPage() {
               <div
                 draggable={newTitle.trim() !== ''}
                 onDragStart={(e) => { e.dataTransfer.effectAllowed = 'copy'; e.dataTransfer.setData('application/json', JSON.stringify({ kind: 'new', title: newTitle })) }}
-                style={{ marginTop: 2, borderRadius: 8, border: '1px dashed var(--color-primary)', padding: '10px 12px', textAlign: 'center', fontSize: 13, fontWeight: 600,
+                onPointerDown={(e) => { if (newTitle.trim()) onDragPointerDown(e, { kind: 'new', title: newTitle }, true) }}
+                onPointerMove={onDragPointerMove}
+                onPointerUp={onDragPointerUp}
+                onPointerCancel={onDragPointerCancel}
+                style={{ marginTop: 2, borderRadius: 8, border: `1px ${armed?.kind === 'new' ? 'solid' : 'dashed'} var(--color-primary)`, padding: '10px 12px', textAlign: 'center', fontSize: 13, fontWeight: 600,
                   color: newTitle.trim() ? 'var(--color-primary)' : 'var(--color-muted-foreground)',
-                  background: newTitle.trim() ? 'color-mix(in srgb, var(--color-primary) 8%, transparent)' : 'transparent',
-                  cursor: newTitle.trim() ? 'grab' : 'not-allowed', opacity: newTitle.trim() ? 1 : 0.6, userSelect: 'none' }}>
+                  background: armed?.kind === 'new'
+                    ? 'color-mix(in srgb, var(--color-primary) 20%, transparent)'
+                    : (newTitle.trim() ? 'color-mix(in srgb, var(--color-primary) 8%, transparent)' : 'transparent'),
+                  cursor: newTitle.trim() ? 'grab' : 'not-allowed', opacity: newTitle.trim() ? 1 : 0.6, userSelect: 'none',
+                  touchAction: newTitle.trim() ? 'none' : 'auto' }}>
                 ⠿ {newTitle.trim() || t('new_event')}
               </div>
-              <p style={{ margin: 0, fontSize: 12, color: 'var(--color-muted-foreground)' }}>{t('drag_hint')}</p>
+              <p style={{ margin: 0, fontSize: 12, color: armed ? 'var(--color-primary)' : 'var(--color-muted-foreground)' }}>
+                {armed ? t('tap_hint', { name: (armed.title || '').trim() || t('new_event') }) : t('drag_hint')}
+              </p>
             </div>
           )}
 
@@ -272,12 +373,14 @@ export default function CalendarPage() {
                   const dayEvents = eventsOn(dayIso)
                   return (
                     <div key={dayIso}
+                      data-day={dayIso}
                       onDragOver={(e) => { e.preventDefault(); if (overDay !== dayIso) setOverDay(dayIso) }}
                       onDragLeave={() => setOverDay((d) => (d === dayIso ? null : d))}
                       onDrop={(e) => onDropDay(e, dayIso)}
+                      onClick={() => onDayTap(dayIso)}
                       style={{ borderRight: '1px solid var(--color-border)', borderBottom: '1px solid var(--color-border)', padding: 4, minHeight: 0, overflow: 'hidden',
-                        display: 'flex', flexDirection: 'column',
-                        background: isOver ? 'color-mix(in srgb, var(--color-primary) 10%, transparent)' : (inMonth ? 'transparent' : 'color-mix(in srgb, var(--color-muted,#888) 5%, transparent)') }}>
+                        display: 'flex', flexDirection: 'column', cursor: armed ? 'copy' : 'default',
+                        background: isOver ?'color-mix(in srgb, var(--color-primary) 10%, transparent)' : (inMonth ? 'transparent' : 'color-mix(in srgb, var(--color-muted,#888) 5%, transparent)') }}>
                       <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                         <span style={{ fontSize: 12, fontWeight: isToday ? 700 : 500,
                           color: isToday ? 'var(--color-primary-foreground,#fff)' : (inMonth ? 'var(--color-foreground)' : 'var(--color-muted-foreground)'),
@@ -291,9 +394,18 @@ export default function CalendarPage() {
                             draggable={can('edit') && ev.start === dayIso}
                             onDragStart={(e) => { setDragId(ev.id); e.dataTransfer.effectAllowed = 'move'; e.dataTransfer.setData('application/json', JSON.stringify({ kind: 'move', id: ev.id, title: ev.title, start: ev.start, end: ev.end })) }}
                             onDragEnd={() => setDragId(null)}
-                            onClick={() => can('edit') && setEditing(ev)}
+                            onPointerDown={(e) => { if (can('edit') && ev.start === dayIso) onDragPointerDown(e, { kind: 'move', id: ev.id, title: ev.title, start: ev.start, end: ev.end }, false) }}
+                            onPointerMove={onDragPointerMove}
+                            onPointerUp={onDragPointerUp}
+                            onPointerCancel={onDragPointerCancel}
+                            onClick={(e) => {
+                              if (justDragged.current) { justDragged.current = false; e.stopPropagation(); return }
+                              if (armed) return
+                              e.stopPropagation()
+                              if (can('edit')) setEditing(ev)
+                            }}
                             title={ev.title}
-                            style={eventChip(dragId === ev.id)}>
+                            style={{ ...eventChip(dragId === ev.id), touchAction: can('edit') && ev.start === dayIso ? 'none' : 'auto' }}>
                             {ev.title}
                           </button>
                         ))}
@@ -306,6 +418,15 @@ export default function CalendarPage() {
           </div>
         </div>
       </div>
+      )}
+
+      {/* Fantôme du drag tactile (pointerEvents:none → n'interfère pas avec elementFromPoint) */}
+      {ghost && (
+        <div style={{ position: 'fixed', left: ghost.x, top: ghost.y, transform: 'translate(-50%, -150%)', zIndex: 80, pointerEvents: 'none',
+          borderRadius: 8, padding: '6px 10px', maxWidth: 200, fontSize: 12, fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
+          background: 'var(--color-primary)', color: 'var(--color-primary-foreground,#fff)', boxShadow: '0 4px 14px rgba(0,0,0,.25)' }}>
+          {ghost.label}
+        </div>
       )}
 
       {editing && (
