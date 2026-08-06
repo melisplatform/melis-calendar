@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties, type DragEvent, type PointerEvent as ReactPointerEvent } from 'react'
 import { fetchEvents, fetchCalStats, saveEvent, deleteEvent, type CalEvent, type CalStats } from './calendar-api'
 import { ViewToggle } from './ViewToggle'
+import { FormErrorBanner, koNotify, type FormIssue } from './shared/melis-form-errors'
 
 /* ──────────────────────────────────────────────────────────────────────────
  * Brique Calendrier (MelisCalendar) — full React, calendrier MENSUEL custom + drag-drop natif.
@@ -36,6 +37,7 @@ const DICT: Record<Lang, Record<string, string>> = {
     kpi_total: 'Total', kpi_upcoming: 'À venir',
     edit_title: 'Modifier l’événement', new_title: 'Nouvel événement', f_title: 'Titre', f_start: 'Début', f_end: 'Fin',
     save: 'Enregistrer', cancel: 'Annuler', del: 'Supprimer', saved: 'Enregistré ✓', err_title: 'Le titre est obligatoire.',
+    err_headline: 'Veuillez corriger les champs indiqués.', err_save_headline: 'L’enregistrement de l’événement a échoué.',
     del_title: 'Confirmer la suppression', del_msg: 'Supprimer l’événement « {name} » ? Cette action est irréversible.',
     no_access: 'Vous n’avez pas les droits pour consulter le calendrier.',
   },
@@ -47,6 +49,7 @@ const DICT: Record<Lang, Record<string, string>> = {
     kpi_total: 'Total', kpi_upcoming: 'Upcoming',
     edit_title: 'Edit event', new_title: 'New event', f_title: 'Title', f_start: 'Start', f_end: 'End',
     save: 'Save', cancel: 'Cancel', del: 'Delete', saved: 'Saved ✓', err_title: 'Title is required.',
+    err_headline: 'Please fix the highlighted fields.', err_save_headline: 'Saving the event failed.',
     del_title: 'Confirm deletion', del_msg: 'Delete event "{name}"? This cannot be undone.',
     no_access: 'You do not have permission to view the calendar.',
   },
@@ -446,24 +449,37 @@ function EventModal({ event, onClose, onSaved }: { event: CalEvent | null; onClo
   const [start, setStart] = useState(event?.start ?? todayISO())
   const [end, setEnd] = useState(event?.end ?? event?.start ?? todayISO())
   const [saving, setSaving] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  // Bannière d'erreur unifiée : titre (bandeau) + liste des champs manquants/invalides.
+  const [errTitle, setErrTitle] = useState<string | null>(null)
+  const [issues, setIssues] = useState<FormIssue[]>([])
   const [confirmDel, setConfirmDel] = useState(false)
   const titleRef = useRef<HTMLInputElement>(null)
   useEffect(() => { titleRef.current?.focus() }, [])
 
+  const titleInvalid = errTitle != null && !title.trim()
+
   async function submit() {
-    setError(null)
-    if (!title.trim()) { setError(t('err_title')); return }
+    setErrTitle(null); setIssues([])
+    // Validation client : liste chaque champ requis manquant.
+    if (!title.trim()) {
+      setErrTitle(t('err_headline')); setIssues([{ label: t('f_title'), message: t('err_title') }]); return
+    }
     const e = end < start ? start : end
     setSaving(true)
     try { await saveEvent({ id: event?.id ?? null, title: title.trim(), start, end: e }); notify('ok', t('title'), t('saved')); onSaved() }
-    catch (err) { setError(err instanceof Error ? err.message : 'error'); setSaving(false) }
+    catch (err) {
+      const msg = err instanceof Error ? err.message : String(err)
+      setErrTitle(t('err_save_headline')); setIssues([{ message: msg }]); koNotify(t('title'), t('err_save_headline')); setSaving(false)
+    }
   }
   async function doDelete() {
     if (!event) return
     setSaving(true)
     try { await deleteEvent(event.id); notify('ok', t('title'), t('saved')); onSaved() }
-    catch (err) { setError(err instanceof Error ? err.message : 'error'); setSaving(false) }
+    catch (err) {
+      const msg = err instanceof Error ? err.message : String(err)
+      setErrTitle(t('err_save_headline')); setIssues([{ message: msg }]); koNotify(t('title'), t('err_save_headline')); setSaving(false)
+    }
   }
 
   return (
@@ -474,10 +490,10 @@ function EventModal({ event, onClose, onSaved }: { event: CalEvent | null; onClo
           <h2 style={{ fontSize: 16, fontWeight: 600, margin: 0 }}>{isEdit ? t('edit_title') : t('new_title')}</h2>
         </div>
         <div style={{ padding: 20, display: 'flex', flexDirection: 'column', gap: 14 }}>
-          {error && <div style={{ ...card, borderColor: '#fca5a5', background: '#fef2f2', color: '#b91c1c', padding: '8px 12px', fontSize: 13 }}>{error}</div>}
+          {errTitle && <FormErrorBanner title={errTitle} issues={issues} />}
           <div>
             <label style={label}>{t('f_title')}</label>
-            <input ref={titleRef} style={inputCss} value={title} onChange={(e) => setTitle(e.target.value)} maxLength={255} />
+            <input ref={titleRef} style={{ ...inputCss, ...(titleInvalid ? { borderColor: '#fca5a5' } : {}) }} value={title} onChange={(e) => setTitle(e.target.value)} maxLength={255} />
           </div>
           <div style={{ display: 'flex', gap: 12 }}>
             <div style={{ flex: 1 }}>
