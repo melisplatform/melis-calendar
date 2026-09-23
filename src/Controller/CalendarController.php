@@ -16,6 +16,16 @@ use Laminas\Session\Container;
 class CalendarController extends MelisAbstractActionController
 {
     /**
+     * Outil auquel ce contrôleur appartient (audit DEKRA 7.0).
+     *
+     * Lu par MelisCoreAuthorizationListener : le garde-fou global résout la route jusqu'à
+     * cette classe et vérifie `canAccess()` sur cette clé AVANT le dispatch. Sans elle, le
+     * contrôleur restait joignable par tout compte connecté (route seulement authentifiée).
+     * Clé accordable par l'arbre des droits — Calendar.
+     */
+    const MELIS_KEY = 'meliscalendar_tool';
+
+    /**
      * Render the leftmenu
      */
     public function renderCalendarLeftmenuAction()
