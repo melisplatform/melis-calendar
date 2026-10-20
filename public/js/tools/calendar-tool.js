@@ -464,8 +464,10 @@ var calendarTool = {
 				});
 				
 				//Datepicker inline initialization
-				$('.dashbaorad-calendar-tool').datepicker({ 
+				$('.dashbaorad-calendar-tool').datepicker({
 					format: "yyyy-mm-dd",
+					// Back-office language, written by the plugin view (names were English, Mantis #0011220)
+					language: $('.dashbaorad-calendar-tool').data('lang') || 'en',
 					inline: true,
 					showOtherMonths:true,
 					todayHighlight: true,
