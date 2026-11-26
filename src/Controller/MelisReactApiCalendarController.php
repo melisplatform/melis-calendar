@@ -129,8 +129,20 @@ class MelisReactApiCalendarController extends MelisAbstractActionController
         if ($deny = $this->denyUnlessAccess()) { return $deny; }
 
         try {
-            $body  = json_decode($this->getRequest()->getContent(), true) ?? [];
-            $id    = isset($body['id']) && $body['id'] ? (int) $body['id'] : null;
+            $body  = json_decode($this->getRequest()->getContent(), true);
+            if (!is_array($body)) { $body = []; }
+
+            // Id (Mantis #0011624): absent / null / '' / 0 → create; an integer (or a string of digits,
+            // optionally negative) → update (unknown → 404); anything else ("abc", 1.5, []) → 400,
+            // instead of being cast to 0 and silently creating a new event.
+            $rawId = $body['id'] ?? null;
+            if ($rawId === null || $rawId === '' || $rawId === 0 || $rawId === '0' || $rawId === false) {
+                $id = null;
+            } elseif (is_int($rawId) || (is_string($rawId) && preg_match('/^-?[0-9]+$/', $rawId))) {
+                $id = (int) $rawId;
+            } else {
+                return $this->jsonResponse(['success' => false, 'error' => 'Identifiant d’événement invalide.'], 400);
+            }
             if ($denyCap = $this->denyUnlessCan($id ? 'edit' : 'create')) { return $denyCap; }
 
             $title = trim((string) ($body['title'] ?? ''));
@@ -139,6 +151,10 @@ class MelisReactApiCalendarController extends MelisAbstractActionController
 
             if ($title === '') {
                 return $this->jsonResponse(['success' => false, 'error' => 'Le titre de l’événement est obligatoire.'], 400);
+            }
+            // ≤ 255 characters (documented limit, same as the New view's maxLength; the column is TEXT)
+            if (mb_strlen($title, 'UTF-8') > 255) {
+                return $this->jsonResponse(['success' => false, 'error' => 'Le titre de l’événement ne doit pas dépasser 255 caractères.'], 400);
             }
             if ($start === null) {
                 return $this->jsonResponse(['success' => false, 'error' => 'La date de début est invalide.'], 400);
@@ -179,6 +195,12 @@ class MelisReactApiCalendarController extends MelisAbstractActionController
 
     public function deleteAction(): HttpResponse
     {
+        // DELETE only (Mantis #0011623): the CSRF check applies to DELETE requests, a GET (e.g. an
+        // <img src> on any page) must never delete an event.
+        if (!$this->getRequest()->isDelete()) {
+            $this->getResponse()->getHeaders()->addHeaderLine('Allow', 'DELETE');
+            return $this->jsonResponse(['success' => false, 'error' => 'Méthode non autorisée : utilisez DELETE.'], 405);
+        }
         if ($deny = $this->denyUnlessAccess()) { return $deny; }
         if ($denyCap = $this->denyUnlessCan('edit')) { return $denyCap; } // supprimer = éditer (pas de droit delete distinct)
 
